@@ -1,0 +1,38 @@
+#%RAML 1.0 Library
+types: 
+  simpleErrorObject: !include newtoms-api-error-obect-data-type.raml
+  errorMessageSchema: !include newtoms-api-error-list-data-type.raml
+
+traits: 
+  errorHandleable:
+    responses: 
+      400:
+        description: The request could not be understood by the server due to malformed syntax. The request could not be understood by the server due to malformed syntax.
+        body: 
+          application/json:
+            type: errorMessageSchema
+            example: !include ../examples/ApiErrorMessage.json
+      401:
+        description: If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials.
+        body: 
+          application/json:
+            type: errorMessageSchema
+            example: !include ../examples/ApiErrorMessage.json
+      404:
+        description: The server has not found anything matching the Request-URI.
+        body: 
+          application/json:
+            type: errorMessageSchema
+            example: !include ../examples/ApiErrorMessage.json
+      406:
+        description: The resource identified by the request is only capable of generating response entities which have content characteristics not acceptable according to the accept headers sent in the request.
+        body: 
+          application/json:
+            type: errorMessageSchema
+            example: !include ../examples/ApiErrorMessage.json
+      500:
+        description: The server encountered an unexpected condition which prevented it from fulfilling the request.
+        body: 
+          application/json:
+            type: errorMessageSchema
+            example: !include ../examples/ApiErrorMessage.json

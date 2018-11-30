@@ -1,0 +1,30 @@
+#%RAML 1.0 Library
+types: 
+  resourceLink: 
+    displayName: Simple Resource Link Object
+    description: Object data for a related url resource for HATEOAS Hypermedia Controls
+    type: object
+    properties: 
+      rel:
+        displayName: rel
+        description: Field value that describe the link intention
+        pattern: ^(.*)$
+        type: string
+      uri:
+        displayName: uri
+        description: Field value with related uri resource
+        pattern: ^(.*)$
+        type: string
+      method:
+        displayName: method
+        description: Http method to call the resource
+        pattern: ^(.*)$
+        type: string
+  resourceLinks:
+    displayName: Resource Links List
+    description: List of resources for HATEOAS Hypermedia Controls
+    type: array
+    items: resourceLink
+traits: 
+  orderable: !include newtoms-api-orderable-trait.raml
+  pageable: !include newtoms-api-pageable-trait.raml

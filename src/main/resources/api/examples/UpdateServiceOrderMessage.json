@@ -1,0 +1,43 @@
+{
+   "id":1234,
+   "href":"",
+   "name":"",
+   "description":"",
+   "type":"",
+   "version":"",
+   "state":"Active",
+   "serviceSpecification":{
+      "id":"conferenceBridgeEquipment",
+      "href":"http://serverlocation:port/catalogManagement/serviceSpecification /conferenceBridgeEquipment"
+   },
+   "serviceCharacteristic":[
+      {
+         "name":"numberOfVc500Units",
+         "value":"1"
+      },
+      {
+         "name":"numberOfVc100Units",
+         "value":"2"
+      },
+      {
+         "name":"routerType",
+         "value":"CiscoASR1000"
+      },
+      {
+         "name":"powerSupply",
+         "value":"UK"
+      }
+   ],
+   "serviceRelationship":[
+
+   ],
+   "relatedParty":[
+
+   ],
+   "supportingService":[
+
+   ],
+   "supportingResource":[
+
+   ]
+}

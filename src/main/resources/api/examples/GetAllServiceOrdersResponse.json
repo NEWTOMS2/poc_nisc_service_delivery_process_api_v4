@@ -1,0 +1,122 @@
+[
+   {
+      "id":1234,
+      "href":"",
+      "name":"",
+      "description":"",
+      "type":"",
+      "version":"",
+      "state":"Active",
+      "serviceSpecification":{
+         "id":"conferenceBridgeEquipment",
+         "href":"http://serverlocation:port/catalogManagement/serviceSpecification /conferenceBridgeEquipment"
+      },
+      "serviceCharacteristic":[
+         {
+            "name":"numberOfVc500Units",
+            "value":"1"
+         },
+         {
+            "name":"numberOfVc100Units",
+            "value":"2"
+         },
+         {
+            "name":"routerType",
+            "value":"CiscoASR1000"
+         },
+         {
+            "name":"powerSupply",
+            "value":"UK"
+         }
+      ],
+      "serviceRelationship":[
+
+      ],
+      "relatedParty":[
+
+      ],
+      "supportingService":[
+
+      ],
+      "supportingResource":[
+
+      ],
+      "links":[
+         {
+            "rel":"/linkrels/service/order/info",
+            "uri":"/service/order/1234",
+            "method":"GET"
+         },
+         {
+            "rel":"/linkrels/service/order/updateInfo",
+            "uri":"/service/order/1234",
+            "method":"PUT"
+         },
+         {
+            "rel":"/linkrels/service/order/delete",
+            "uri":"/service/order/1234",
+            "method":"DELETE"
+         }
+      ]
+   },
+   {
+      "id":5678,
+      "href":"",
+      "name":"",
+      "description":"",
+      "type":"",
+      "version":"",
+      "state":"Active",
+      "serviceSpecification":{
+         "id":"conferenceBridgeEquipment",
+         "href":"http://serverlocation:port/catalogManagement/serviceSpecification /conferenceBridgeEquipment"
+      },
+      "serviceCharacteristic":[
+         {
+            "name":"numberOfVc500Units",
+            "value":"1"
+         },
+         {
+            "name":"numberOfVc100Units",
+            "value":"2"
+         },
+         {
+            "name":"routerType",
+            "value":"CiscoASR1000"
+         },
+         {
+            "name":"powerSupply",
+            "value":"UK"
+         }
+      ],
+      "serviceRelationship":[
+
+      ],
+      "relatedParty":[
+
+      ],
+      "supportingService":[
+
+      ],
+      "supportingResource":[
+
+      ],
+      "links":[
+         {
+            "rel":"/linkrels/service/order/info",
+            "uri":"/service/order/5678",
+            "method":"GET"
+         },
+         {
+            "rel":"/linkrels/service/order/updateInfo",
+            "uri":"/service/order/5678",
+            "method":"PUT"
+         },
+         {
+            "rel":"/linkrels/service/order/delete",
+            "uri":"/service/order/5678",
+            "method":"DELETE"
+         }
+      ]
+   }
+]

@@ -1,0 +1,115 @@
+#%RAML 1.0
+baseUri: https://mocksvc.mulesoft.com/mocks/a37243e6-2a46-4dd0-9583-01d8679e6eff # 
+title: POC NiSC Service Delivery System API
+version: 1.0.0
+protocols: [HTTP, HTTPS]
+mediaType: application/json
+
+uses: 
+  commonLibrary: exchange_modules/newtoms-api-common-library.raml
+  errorLibrary: exchange_modules/newtoms-api-error-message-library.raml
+  serviceLibrary: exchange_modules/poc_nisc_service_library.raml
+types: 
+  CreateServiceRequest:
+    type: serviceLibrary.simpleService
+    properties: 
+      serviceSpecification:
+        type: serviceLibrary.ServiceSpecification
+      serviceCharacteristic:
+        type: array
+        items:
+          type: serviceLibrary.ServiceCharacteristic
+      relatedParty:
+        type: array
+        required: false
+        items: 
+          type: serviceLibrary.RelatedParty
+  CreateServiceResponse:
+    type: CreateServiceRequest
+    properties: 
+      links:
+        type: commonLibrary.resourceLinks
+  FullServiceResponse:
+    type: serviceLibrary.service
+    properties: 
+      links:
+        type: commonLibrary.resourceLinks
+  GetAllServiceResponse:
+    type: array
+    items: FullServiceResponse
+
+/service:
+  /order:
+    get:
+      displayName: Get Service Orders
+      description: Get Service Orders by specific search.
+      is: [commonLibrary.orderable: {fieldsList: OrderId}, commonLibrary.pageable, errorLibrary.errorHandleable]
+      queryParameters: 
+        SubscriberId: 
+          displayName: Subcriber Id
+          description: Query all Service Orders base on subscriber identification number
+          type: string
+          example: "0123456789"
+          required: false
+        Status: 
+          displayName: Service Orders Status
+          description: Query all Service Orders base on status
+          type: string
+          example: "Active"
+          required: false
+      responses: 
+        200:
+          description: Return a list of service orders
+          body: 
+            application/json:
+              type: GetAllServiceResponse
+              example: !include examples/GetAllServiceOrdersResponse.json
+    post:
+      displayName: Create a Service Order
+      description: Process a Service Order to activate a network service to a Customer.
+      is: [errorLibrary.errorHandleable]
+      body: 
+        application/json:
+          type: CreateServiceRequest
+          example: !include examples/CreateServiceOrderRequest.json
+      responses:
+        201:
+          description: The Serivice Order was created
+          body: 
+            application/json:
+              type: CreateServiceResponse
+              example: !include examples/CreateServiceOrderResponse.json
+    /{id}:
+      get:
+        displayName: Get a Service Order
+        description: Get full Service Order data by Id.
+        is: [errorLibrary.errorHandleable]
+        responses: 
+          200:
+            description: The requested Service Order
+            body: 
+              application/json:
+                type: FullServiceResponse
+                example: !include examples/CreatedServiceOrderMessage.json
+      put:
+        displayName: Update a Service Order
+        description: Update information about the service order.
+        is: [errorLibrary.errorHandleable]
+        body: 
+          application/json:
+            type: serviceLibrary.service
+            example: !include examples/UpdateServiceOrderMessage.json
+        responses:
+          200:
+            description: The Serivice Order was updated
+            body: 
+              application/json:
+                type: FullServiceResponse
+                example: !include examples/CreatedServiceOrderMessage.json
+      delete:
+        displayName: Delete a Service Order
+        description: Delete a Service Order that it is no longer relevant.
+        is: [errorLibrary.errorHandleable]
+        responses: 
+          200:
+            description: The Serivice Order was deleted

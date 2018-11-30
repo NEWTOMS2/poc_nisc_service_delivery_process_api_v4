@@ -1,0 +1,13 @@
+#%RAML 1.0 DataType
+type: object
+description: General API Error Message Schema
+properties:
+  error:
+    type: object
+    description: The Error Schema
+    properties:
+      errors:
+        type: array
+        description: The Errors Schema
+        items:
+          type: !include newtoms-api-error-obect-data-type.raml
