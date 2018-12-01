@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd 
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="service_delivery_cms_system_api-test-messages-suite.xml" />
+	<sub-flow name="setExpectedPutUpdateServiceOrderResponse" doc:id="c5ac95fe-1cd3-420e-a8cc-d21dc5e88da6" >
+		<ee:transform doc:name="Transform Message" doc:id="15bc564b-75eb-45ff-bdef-b2a74825079d" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="putUpdateServiceOrderResponse" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+   id:1234,
+   href:"",
+   name:"",
+   description:"",
+   "type":"",
+   version:"",
+   state:"Active",
+   serviceSpecification:{
+      id:"conferenceBridgeEquipment",
+      href:"http://serverlocation:port/catalogManagement/serviceSpecification /conferenceBridgeEquipment"
+   },
+   serviceCharacteristic:[
+      {
+         name:"numberOfVc500Units",
+         value:"1"
+      },
+      {
+         name:"numberOfVc100Units",
+         value:"2"
+      },
+      {
+         name:"routerType",
+         value:"CiscoASR1000"
+      },
+      {
+         name:"powerSupply",
+         value:"UK"
+      }
+   ],
+   serviceRelationship:[
+
+   ],
+   relatedParty:[
+
+   ],
+   supportingService:[
+
+   ],
+   supportingResource:[
+
+   ],
+   links:[
+      {
+         rel:"/linkrels/service/order/info",
+         uri:"/service/order/1234",
+         method:"GET"
+      },
+      {
+         rel:"/linkrels/service/order/updateInfo",
+         uri:"/service/order/1234",
+         method:"PUT"
+      },
+      {
+         rel:"/linkrels/service/order/delete",
+         uri:"/service/order/1234",
+         method:"DELETE"
+      }
+   ]
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="getUpdateServiceOrderRequestForTest" doc:id="176ddf82-a615-41a0-afa5-568dbe194c41" >
+		<set-payload value="#[null]" doc:name="Set Payload" doc:id="5c851879-65de-4086-90d4-c18574e95b85" />
+		<ee:transform doc:name="Transform Message" doc:id="7bf457b8-0f96-4001-9dd7-b5e37fa879e9" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+   id:1234,
+   href:"",
+   name:"",
+   description:"",
+   "type":"",
+   version:"",
+   state:"Active",
+   serviceSpecification:{
+      id:"conferenceBridgeEquipment",
+      href:"http://serverlocation:port/catalogManagement/serviceSpecification /conferenceBridgeEquipment"
+   },
+   serviceCharacteristic:[
+      {
+         name:"numberOfVc500Units",
+         value:"1"
+      },
+      {
+         name:"numberOfVc100Units",
+         value:"2"
+      },
+      {
+         name:"routerType",
+         value:"CiscoASR1000"
+      },
+      {
+         name:"powerSupply",
+         value:"UK"
+      }
+   ],
+   serviceRelationship:[
+
+   ],
+   relatedParty:[
+
+   ],
+   supportingService:[
+
+   ],
+   supportingResource:[
+
+   ]
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="setExpectedGellAllServiceOrdersByFilterResponse" doc:id="20b1d0df-186a-45fa-8945-46918670df29" >
+		<ee:transform doc:name="Transform Message" doc:id="8d5d7e36-18f6-4ca8-8f5c-3667884624c2" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="expectedGellAllServiceOrdersByFilterResponse" ><![CDATA[%dw 2.0
+output application/json
+---
+[
+  {
+    id: 1234,
+    href: "",
+    name: "",
+    description: "",
+    "type": "",
+    version: "",
+    state: "Active",
+    serviceSpecification: {
+      id: "conferenceBridgeEquipment",
+      href: "http://serverlocation:port/catalogManagement/serviceSpecification /conferenceBridgeEquipment"
+    },
+    serviceCharacteristic: [
+      {
+        name: "numberOfVc500Units",
+        value: "1"
+      }, 
+      {
+        name: "numberOfVc100Units",
+        value: "2"
+      }, 
+      {
+        name: "routerType",
+        value: "CiscoASR1000"
+      }, 
+      {
+        name: "powerSupply",
+        value: "UK"
+      }
+    ],
+    serviceRelationship: [],
+    relatedParty: [],
+    supportingService: [],
+    supportingResource: [],
+    links: [
+      {
+        rel: "/linkrels/service/order/info",
+        uri: "/service/order/1234",
+        method: "GET"
+      }, 
+      {
+        rel: "/linkrels/service/order/updateInfo",
+        uri: "/service/order/1234",
+        method: "PUT"
+      }, 
+      {
+        rel: "/linkrels/service/order/delete",
+        uri: "/service/order/1234",
+        method: "DELETE"
+      }
+    ]
+  }, 
+  {
+    id: 5678,
+    href: "",
+    name: "",
+    description: "",
+    "type": "",
+    version: "",
+    state: "Active",
+    serviceSpecification: {
+      id: "conferenceBridgeEquipment",
+      href: "http://serverlocation:port/catalogManagement/serviceSpecification /conferenceBridgeEquipment"
+    },
+    serviceCharacteristic: [
+      {
+        name: "numberOfVc500Units",
+        value: "1"
+      }, 
+      {
+        name: "numberOfVc100Units",
+        value: "2"
+      }, 
+      {
+        name: "routerType",
+        value: "CiscoASR1000"
+      }, 
+      {
+        name: "powerSupply",
+        value: "UK"
+      }
+    ],
+    serviceRelationship: [],
+    relatedParty: [],
+    supportingService: [],
+    supportingResource: [],
+    links: [
+      {
+        rel: "/linkrels/service/order/info",
+        uri: "/service/order/5678",
+        method: "GET"
+      }, 
+      {
+        rel: "/linkrels/service/order/updateInfo",
+        uri: "/service/order/5678",
+        method: "PUT"
+      }, 
+      {
+        rel: "/linkrels/service/order/delete",
+        uri: "/service/order/5678",
+        method: "DELETE"
+      }
+    ]
+  }
+]]]></ee:set-variable>
+			
+</ee:variables>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="setExpectedVarErrorMessage500" doc:id="e4656473-63c8-4f13-9bba-edf78ccce2c6" >
+		<ee:transform doc:name="Transform Message" doc:id="544bcda0-a1e7-4d61-b7e6-9c6d35af9ba3" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="errorMessage500" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+   error:{
+      errors:[
+         {
+            id:"500",
+            code:"ERR500",
+            status:"500",
+            title:"Internal Server Error",
+            detail:"",
+            href:"https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html"
+         }
+      ]
+   }
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="setExpectedVarErrorMessage406" doc:id="4b83c0cc-70a0-42d8-bd88-dfab73e62fcf" >
+		<ee:transform doc:name="Transform Message" doc:id="d4f3df49-e8b0-4d82-95ba-115354cb0886" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="errorMessage406" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+   error:{
+      errors:[
+         {
+            id:"406",
+            code:"ERR406",
+            status:"406",
+            title:"Not Acceptable",
+            detail:"The resource identified by the request is only capable of generating response entities which have content characteristics not acceptable according to the accept headers sent in the request.",
+            href:"https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html"
+         }
+      ]
+   }
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="setExpectedVarErrorMessage405" doc:id="6412de54-b9c3-4e25-a220-141d8e7c3c53" >
+		<ee:transform doc:name="Transform Message" doc:id="d62cd9c6-3f68-4192-9cde-4af1e83e6720" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="errorMessage405" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+   error:{
+      errors:[
+         {
+            id:"405",
+            code:"ERR405",
+            status:"405",
+            title:"Method Not Allowed",
+            detail:"The method specified in the Request-Line is not allowed for the resource identified by the Request-URI. The response MUST include an Allow header containing a list of valid methods for the requested resource.",
+            href:"https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html"
+         }
+      ]
+   }
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="setExpectedVarErrorMessage404" doc:id="c1cc0cb0-3d92-4092-989a-99e16b182dbc" >
+		<ee:transform doc:name="Transform Message" doc:id="7a85c098-3ecd-4096-aab2-6f81b7d7acd6" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="errorMessage404" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+   error:{
+      errors:[
+         {
+            id:"404",
+            code:"ERR404",
+            status:"404",
+            title:"Not Found",
+            detail:"The server has not found anything matching the Request-URI.",
+            href:"https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html"
+         }
+      ]
+   }
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="setExpectedVarErrorMessage400" doc:id="34a2d9af-0d8b-420a-a0af-9d5577b582f0" >
+		<ee:transform doc:name="Transform Message" doc:id="501bf338-e032-4101-9fb8-8a87a4896bef" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="errorMessage400" ><![CDATA[%dw 2.0
+output application/java
+---
+{
+   error:{
+      errors:[
+         {
+            id:"400",
+            code:"ERR400",
+            status:"400",
+            title:"Bad Request",
+            detail:"The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            href:"https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html"
+         }
+      ]
+   }
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="setExpectedVarErrorMessage415" doc:id="ffc65d94-abe8-4d3e-a8d8-62fd1bc1f7f6" >
+		<ee:transform doc:name="Transform Message" doc:id="82f525fb-3864-481f-a86b-bae20a34920c" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="errorMessage415" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+   error:{
+      errors:[
+         {
+            id:"415",
+            code:"ERR415",
+            status:"415",
+            title:"Unsupported Media Type",
+            detail:"The server is refusing to service the request because the entity of the request is in a format not supported by the requested resource for the requested method.",
+            href:"https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html"
+         }
+      ]
+   }
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="setExpectedPostCreateServiceResponse" doc:id="5d7be970-e708-4305-a007-aa4ff99f8eb9" >
+		<ee:transform doc:name="Transform Message" doc:id="b533e396-d8df-4d69-b550-3328e56e8448" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="postCreateServiceResponse" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+   id: 1234,
+   state:"Active",
+   serviceSpecification:{
+      id:"conferenceBridgeEquipment",
+      href:"http://serverlocation:port/catalogManagement/serviceSpecification /conferenceBridgeEquipment"
+   },
+   serviceCharacteristic:[
+      {
+         name:"numberOfVc500Units",
+         value:"1"
+      },
+      {
+         name:"numberOfVc100Units",
+         value:"2"
+      },
+      {
+         name:"routerType",
+         value:"CiscoASR1000"
+      },
+      {
+         name:"powerSupply",
+         value:"UK"
+      }
+   ],
+   relatedParty:[
+      {
+         role:"Subscriber",
+         id:"1234",
+         href:"http://serverLocation:port/partyManagement/partyRole/1234"
+      }
+   ],
+   links:[
+      {
+         rel:"/linkrels/service/order/info",
+         uri:"/service/order/1234",
+         method:"GET"
+      },
+      {
+         rel:"/linkrels/service/order/updateInfo",
+         uri:"/service/order/1234",
+         method:"PUT"
+      },
+      {
+         rel:"/linkrels/service/order/delete",
+         uri:"/service/order/1234",
+         method:"DELETE"
+      }
+   ]
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="getCreateServiceRequestForTest" doc:id="f5b322f9-878d-49e5-9e88-9e212ee637dc" >
+		<set-payload value="#[null]" doc:name="Set Payload" doc:id="7ff447a5-a98d-42ad-89ca-99175f5b263b" />
+		<ee:transform doc:name="Transform Message" doc:id="8bff6a5e-3ac2-40a3-bcd8-2b0f65a9c669" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+   state:"Active",
+   serviceSpecification:{
+      id:"conferenceBridgeEquipment",
+      href:"http: //serverlocation:port/catalogManagement/serviceSpecification /conferenceBridgeEquipment"
+   },
+   serviceCharacteristic:[
+      {
+         name:"numberOfVc500Units",
+         value:"1"
+      },
+      {
+         name:"numberOfVc100Units",
+         value:"2"
+      },
+      {
+         name:"routerType",
+         value:"CiscoASR1000"
+      },
+      {
+         name:"powerSupply",
+         value:"UK"
+      }
+   ],
+   relatedParty:[
+      {
+         role:"Subscriber",
+         id:"1234",
+         href:"http://serverLocation:port/partyManagement/partyRole/1234"
+      }
+   ]
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+</mule>
