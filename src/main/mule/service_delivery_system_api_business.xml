@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<sub-flow name="createAServiceOrderToProcess" doc:id="f8b978a4-161f-4819-894e-320a795177af" >
+		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="beb2a29f-d017-4316-9278-a96d03f362f4">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  id: 1234,
+  state: "Active",
+  serviceSpecification: {
+    id: "conferenceBridgeEquipment",
+    href: "http://serverlocation:port/catalogManagement/serviceSpecification /conferenceBridgeEquipment"
+  },
+  serviceCharacteristic: [
+    {
+      name: "numberOfVc500Units",
+      value: "1"
+    }, 
+    {
+      name: "numberOfVc100Units",
+      value: "2"
+    }, 
+    {
+      name: "routerType",
+      value: "CiscoASR1000"
+    }, 
+    {
+      name: "powerSupply",
+      value: "UK"
+    }
+  ],
+  relatedParty: [
+    {
+      role: "Subscriber",
+      id: "1234",
+      href: "http://serverLocation:port/partyManagement/partyRole/1234"
+    }
+  ],
+  links: [
+    {
+      rel: "/linkrels/service/order/info",
+      uri: "/service/order/1234",
+      method: "GET"
+    }, 
+    {
+      rel: "/linkrels/service/order/updateInfo",
+      uri: "/service/order/1234",
+      method: "PUT"
+    }, 
+    {
+      rel: "/linkrels/service/order/delete",
+      uri: "/service/order/1234",
+      method: "DELETE"
+    }
+  ]
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+	</sub-flow>
+	<sub-flow name="getServiceOrderById" doc:id="8db399bf-9d9d-4f09-9b7b-5069211b40cd" >
+		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="6a181017-1674-459b-bc97-556a947e419c">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  id: 1234,
+  href: "",
+  name: "",
+  description: "",
+  "type": "",
+  version: "",
+  state: "Active",
+  serviceSpecification: {
+    id: "conferenceBridgeEquipment",
+    href: "http://serverlocation:port/catalogManagement/serviceSpecification /conferenceBridgeEquipment"
+  },
+  serviceCharacteristic: [
+    {
+      name: "numberOfVc500Units",
+      value: "1"
+    }, 
+    {
+      name: "numberOfVc100Units",
+      value: "2"
+    }, 
+    {
+      name: "routerType",
+      value: "CiscoASR1000"
+    }, 
+    {
+      name: "powerSupply",
+      value: "UK"
+    }
+  ],
+  serviceRelationship: [],
+  relatedParty: [],
+  supportingService: [],
+  supportingResource: [],
+  links: [
+    {
+      rel: "/linkrels/service/order/info",
+      uri: "/service/order/1234",
+      method: "GET"
+    }, 
+    {
+      rel: "/linkrels/service/order/updateInfo",
+      uri: "/service/order/1234",
+      method: "PUT"
+    }, 
+    {
+      rel: "/linkrels/service/order/delete",
+      uri: "/service/order/1234",
+      method: "DELETE"
+    }
+  ]
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+	</sub-flow>
+	<sub-flow name="getAllServiceOrderByFilters" doc:id="3dfa90a6-331c-4dd7-9996-6890dceb50da" >
+		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="764ae13a-1251-4e65-8517-f11c10530083">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+[
+  {
+    id: 1234,
+    href: "",
+    name: "",
+    description: "",
+    "type": "",
+    version: "",
+    state: "Active",
+    serviceSpecification: {
+      id: "conferenceBridgeEquipment",
+      href: "http://serverlocation:port/catalogManagement/serviceSpecification /conferenceBridgeEquipment"
+    },
+    serviceCharacteristic: [
+      {
+        name: "numberOfVc500Units",
+        value: "1"
+      }, 
+      {
+        name: "numberOfVc100Units",
+        value: "2"
+      }, 
+      {
+        name: "routerType",
+        value: "CiscoASR1000"
+      }, 
+      {
+        name: "powerSupply",
+        value: "UK"
+      }
+    ],
+    serviceRelationship: [],
+    relatedParty: [],
+    supportingService: [],
+    supportingResource: [],
+    links: [
+      {
+        rel: "/linkrels/service/order/info",
+        uri: "/service/order/1234",
+        method: "GET"
+      }, 
+      {
+        rel: "/linkrels/service/order/updateInfo",
+        uri: "/service/order/1234",
+        method: "PUT"
+      }, 
+      {
+        rel: "/linkrels/service/order/delete",
+        uri: "/service/order/1234",
+        method: "DELETE"
+      }
+    ]
+  }, 
+  {
+    id: 5678,
+    href: "",
+    name: "",
+    description: "",
+    "type": "",
+    version: "",
+    state: "Active",
+    serviceSpecification: {
+      id: "conferenceBridgeEquipment",
+      href: "http://serverlocation:port/catalogManagement/serviceSpecification /conferenceBridgeEquipment"
+    },
+    serviceCharacteristic: [
+      {
+        name: "numberOfVc500Units",
+        value: "1"
+      }, 
+      {
+        name: "numberOfVc100Units",
+        value: "2"
+      }, 
+      {
+        name: "routerType",
+        value: "CiscoASR1000"
+      }, 
+      {
+        name: "powerSupply",
+        value: "UK"
+      }
+    ],
+    serviceRelationship: [],
+    relatedParty: [],
+    supportingService: [],
+    supportingResource: [],
+    links: [
+      {
+        rel: "/linkrels/service/order/info",
+        uri: "/service/order/5678",
+        method: "GET"
+      }, 
+      {
+        rel: "/linkrels/service/order/updateInfo",
+        uri: "/service/order/5678",
+        method: "PUT"
+      }, 
+      {
+        rel: "/linkrels/service/order/delete",
+        uri: "/service/order/5678",
+        method: "DELETE"
+      }
+    ]
+  }
+]]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+	</sub-flow>
+	<sub-flow name="updateServiceOrderById" doc:id="94902a98-6df4-4ec2-964f-043a1735095c" >
+		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  id: 1234,
+  href: "",
+  name: "",
+  description: "",
+  "type": "",
+  version: "",
+  state: "Active",
+  serviceSpecification: {
+    id: "conferenceBridgeEquipment",
+    href: "http://serverlocation:port/catalogManagement/serviceSpecification /conferenceBridgeEquipment"
+  },
+  serviceCharacteristic: [
+    {
+      name: "numberOfVc500Units",
+      value: "1"
+    }, 
+    {
+      name: "numberOfVc100Units",
+      value: "2"
+    }, 
+    {
+      name: "routerType",
+      value: "CiscoASR1000"
+    }, 
+    {
+      name: "powerSupply",
+      value: "UK"
+    }
+  ],
+  serviceRelationship: [],
+  relatedParty: [],
+  supportingService: [],
+  supportingResource: [],
+  links: [
+    {
+      rel: "/linkrels/service/order/info",
+      uri: "/service/order/1234",
+      method: "GET"
+    }, 
+    {
+      rel: "/linkrels/service/order/updateInfo",
+      uri: "/service/order/1234",
+      method: "PUT"
+    }, 
+    {
+      rel: "/linkrels/service/order/delete",
+      uri: "/service/order/1234",
+      method: "DELETE"
+    }
+  ]
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+	</sub-flow>
+	<sub-flow name="deleteServiceOrderById" doc:id="5eed536c-551e-4c1f-8933-d1c47ff1c481" >
+		<set-payload value="#[null]" doc:name="Set Payload" doc:id="25eec1a1-4e7e-4001-a4c7-6f1c55789c59" />
+	</sub-flow>
+</mule>

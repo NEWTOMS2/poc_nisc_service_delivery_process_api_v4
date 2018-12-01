@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd 
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="http_get_service_order_api_console-test-suite.xml" />
+	<http:request-config name="HTTP_Console_Test_Request_configuration" doc:name="HTTP Request configuration" doc:id="49287de8-e80b-4a64-ada9-185cd9c3b33b" >
+		<http:request-connection host="localhost" port="8081" />
+	</http:request-config>
+	<munit:before-test name="http_get_service_order_api_console-test-suiteBefore_Test" description="Before tests actions" doc:id="77233508-8a8f-46d4-9910-793da5435796" >
+		<flow-ref doc:name="setExpectedVarErrorMessage404" doc:id="8fa60122-e0d1-4424-a0b8-6e1fab590821" name="setExpectedVarErrorMessage404"/>
+	</munit:before-test>
+	<munit:test name="FunctionalTest_ConsoleItsUpAndRunnig" description="FunctionalTest_ConsoleItsUpAndRunnig" doc:id="6476ef94-73e2-4cdb-96e7-88248e295021">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-console" />
+		</munit:enable-flow-sources>
+		<munit:execution >
+			<flow-ref doc:name="requestHTTPGETConsole" doc:id="d4f3fa9d-5ecb-4c1e-83f6-510c5dc9e08f" name="requestHTTPGETConsole" />
+</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Response Message is Not Null" doc:id="a64c8e06-14a9-4803-b414-1edd0515d58f" expression="#[payload]" is="#[MunitTools::notNullValue()]" message="Response Message is Null!!" />
+</munit:validation>
+	</munit:test>
+	<sub-flow name="requestHTTPGETConsole" doc:id="e9e45a8b-e0cf-42ae-9fc5-f8d724b81c5a" >
+		<http:request method="GET" doc:name="HTTP-GET-Console" doc:id="53731e9a-0604-46c8-9930-0e47b410a06e" config-ref="HTTP_Console_Test_Request_configuration" path="console/">
+				<http:response-validator>
+						<http:success-status-code-validator values="200" />
+					</http:response-validator>
+			</http:request>
+	</sub-flow>
+	<munit:test name="FuntionalTest-GivenAnInvalidAPIConsoleUrlWhenGetAPIDocumentationThenReturnA404ErrorMessage" description="FuntionalTest-GivenAnInvalidAPIConsoleUrlWhenGetAPIDocumentationThenReturnA404ErrorMessage" doc:id="de9f1873-391b-4628-86c4-cbaa3441c439">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-console" />
+		</munit:enable-flow-sources>
+		<munit:execution >
+			<flow-ref doc:name="getCreateServiceRequestForTest" doc:id="420a13e1-b254-4c97-9331-f4e76aa0765a" name="getCreateServiceRequestForTest"/>
+			<try doc:name="Try" doc:id="78eb64bc-5591-4749-8485-89850fc30ec8" >
+				<http:request method="GET" doc:name="HTTP-GET-Console" doc:id="2279256c-93da-462c-a9cc-e78ea24aad39" config-ref="HTTP_Console_Test_Request_configuration" path="console/notexist">
+				<http:response-validator>
+						<http:failure-status-code-validator values="500" />
+					</http:response-validator>
+			</http:request>
+				<error-handler >
+					<on-error-continue enableNotifications="false" logException="false" doc:name="On Error Continue" doc:id="e4e64d45-3825-4704-8244-55e31ee3026b" type="ANY"/>
+				</error-handler>
+			</try>
+		
+</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Response Message is Not Null" doc:id="b158f64b-94da-4a8e-bf19-dec0385d4478" expression="#[payload]" is="#[MunitTools::notNullValue()]" message="Response Message is Null!!" />
+			<munit-tools:assert-that doc:name="Assert that Response Message is the expected Message" doc:id="93bed4e2-07c0-4a28-8a28-bb464279b9c5" expression="#[payload]" is="#[MunitTools::equalTo(vars.errorMessage404 default '')]" message="Response Message is Null!!" />
+		
+
+
+</munit:validation>
+	</munit:test>
+</mule>

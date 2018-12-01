@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd 
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="http_post_service_order_api-test-suite.xml" />
+	<munit:before-test name="http_post_service_order_api-test-suiteBefore_Test" description="Before tests actions" doc:id="cbf27714-e083-4609-96e8-90c6f33a0140" >
+		<flow-ref doc:name="setExpectedPostCreateServiceResponse" doc:id="2a0c7c26-a8e1-4acb-a67f-5ff51779eb45" name="setExpectedPostCreateServiceResponse"/>
+	</munit:before-test>
+	<munit:test name="FuntionalTest-GivenACreateServiceOrderWhenPostRequestToServiceOrderAPIThenReturnAValidResponse" description="FuntionalTest-GivenACreateServiceOrderWhenPostRequestToServiceOrderAPIThenReturnAValidResponse" doc:id="6476ef94-73e2-4cdb-96e7-88248e295021">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="post:\service\order:application\json:poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when call createAServiceOrderToProcess" doc:id="109405de-de4b-4ae4-a746-ec5fd05071d5" processor="mule:flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="createAServiceOrderToProcess" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.postCreateServiceResponse]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="getCreateServiceRequestForTest" doc:id="ed58a92f-8f9f-4077-9ad0-336acd494658" name="getCreateServiceRequestForTest"/>
+			<http:request method="POST" doc:name="HTTP-POST-CreateServiceOrder" doc:id="9edcf81a-ce31-4bdf-a632-8f5761990e0b" config-ref="HTTP_API_TEST_Request_configuration" path="/service/order">
+					<http:response-validator>
+						<http:success-status-code-validator values="201" />
+					</http:response-validator>
+			</http:request>
+</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Response Message is Not Null" doc:id="a64c8e06-14a9-4803-b414-1edd0515d58f" expression="#[payload]" is="#[MunitTools::notNullValue()]" message="Response Message is Null!!" />
+			<munit-tools:assert-that doc:name="Assert that Response Message is the expected Message" doc:id="e112074c-784a-4362-af67-a4af35b00732" expression="#[payload]" is="#[MunitTools::equalTo(vars.postCreateServiceResponse default '')]" message="Response Message is Null!!" />
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenACreateServiceOrderWhenPostRequestToServiceOrderAPIThenReturnAHTTPSTATUS201" description="FuntionalTest-GivenACreateServiceOrderWhenPostRequestToServiceOrderAPIThenReturnAHTTPSTATUS201" doc:id="f7803af1-cfea-4a94-b782-2f02afb12f19">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="post:\service\order:application\json:poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when call createAServiceOrderToProcess" doc:id="5e9d6b84-7aaf-4e82-8614-8cd8e7e9276a" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="createAServiceOrderToProcess" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.postCreateServiceResponse]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		
+</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="getCreateServiceRequestForTest" doc:id="29f0da21-4c58-4036-8642-5b546c032803" name="getCreateServiceRequestForTest"/>
+			<http:request method="POST" doc:name="HTTP-POST-CreateServiceOrder" doc:id="fe78cacf-d1ea-44b9-be43-6fe8da3b82f0" config-ref="HTTP_API_TEST_Request_configuration" path="/service/order">
+			</http:request>
+</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Http Status Code is the expected" doc:id="982d009b-b1ce-42ae-b4b9-3810d69f5f9f" expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(201 default 200)]" message="Http Status Code is not the expected!!!" />
+			<munit-tools:assert-that doc:name="Assert that Http Reason Phrase is the expected" doc:id="7c58097b-26e4-46d7-b15d-590e597afcb6" expression="#[attributes.reasonPhrase]" is="#[MunitTools::equalTo('Created' default '')]" message="Http Status Code is not the expected!!!" />
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenACreateServiceOrderWhenPostRequestToServiceOrderAPIThenReturnExpectedContentType" description="FuntionalTest-GivenACreateServiceOrderWhenPostRequestToServiceOrderAPIThenReturnExpectedContentType" doc:id="dbf1b8d4-b0ea-4e35-9e18-3e24d7cf026f">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="post:\service\order:application\json:poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when call createAServiceOrderToProcess" doc:id="23d18900-236d-4d14-b281-b425989e4198" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="createAServiceOrderToProcess" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.postCreateServiceResponse]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		
+</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="getCreateServiceRequestForTest" doc:id="057251e7-eafe-4644-9ead-6938231d3428" name="getCreateServiceRequestForTest"/>
+			<http:request method="POST" doc:name="HTTP-POST-CreateServiceOrder" doc:id="e882d4fc-9d9a-4aa8-a38e-01a7662ecf50" config-ref="HTTP_API_TEST_Request_configuration" path="/service/order">
+					<http:response-validator>
+						<http:success-status-code-validator values="201" />
+					
+</http:response-validator>
+			</http:request>
+</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Http Content Type is the expected" doc:id="e54113ea-f6fe-4541-bfce-be68fbb3d81a" expression="#[attributes.headers.'content-type']" is="#[MunitTools::equalTo('application/json; charset=UTF-8' default '')]" message="Http Content Type is not the expected!!!" />
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenACreateServiceOrderWhenPostRequestToServiceOrderAPIThenVerifyThatTheRequestWasRoutedToRigthImplementation" description="FuntionalTest-GivenACreateServiceOrderWhenPostRequestToServiceOrderAPIThenVerifyThatTheRequestWasRoutedToRigthImplementation" doc:id="9a8a3a8c-a23f-4224-a39b-1883ebd81c94">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="post:\service\order:application\json:poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when call createAServiceOrderToProcess" doc:id="b391284b-9d6d-49f4-9326-be6b61adde61" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="createAServiceOrderToProcess" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.postCreateServiceResponse]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		
+</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="getCreateServiceRequestForTest" doc:id="c3dd1432-1c69-4e99-ad3e-503a4cb75158" name="getCreateServiceRequestForTest"/>
+			<http:request method="POST" doc:name="HTTP-POST-CreateServiceOrder" doc:id="ac020b7e-de5b-4558-b900-258cded22836" config-ref="HTTP_API_TEST_Request_configuration" path="/service/order">
+					<http:response-validator>
+						<http:success-status-code-validator values="201" />
+					
+</http:response-validator>
+			</http:request>
+</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="1738e92a-ad7d-44bc-9adf-878c2a9ec3f4" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="createAServiceOrderToProcess" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+
+</munit:validation>
+	</munit:test>
+</mule>

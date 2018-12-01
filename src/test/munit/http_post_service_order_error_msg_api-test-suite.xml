@@ -1,0 +1,774 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd 
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="http_post_service_order_error_msg_api-test-suite.xml" />
+	<http:request-config name="HTTP_API_TEST_Request_configuration" doc:name="HTTP Request configuration" doc:id="da91855d-8c83-4663-956c-e2ad4f1d6b87" basePath="/api" >
+		<http:request-connection host="localhost" port="8081" />
+	</http:request-config>
+	<munit:before-test name="http_post_service_order_error_msg_api-test-suiteBefore_Test" description="Before tests actions" doc:id="ca45b8de-c66d-484c-9240-dcad761de105" >
+		<flow-ref doc:name="setExpectedVarErrorMessage400" doc:id="bf11ab7c-6110-4ca7-994d-77caaa441e57" name="setExpectedVarErrorMessage400"/>
+		<flow-ref doc:name="setExpectedVarErrorMessage404" doc:id="c5b4fc8f-ec67-4085-aaaa-d3cbadfe90ef" name="setExpectedVarErrorMessage404"/>
+		<flow-ref doc:name="setExpectedVarErrorMessage405" doc:id="2cf9871a-2f14-4e86-a94d-b1a0c3c6bbf5" name="setExpectedVarErrorMessage405"/>
+		<flow-ref doc:name="setExpectedVarErrorMessage406" doc:id="97025b95-68a3-4b58-b5c8-0446ab9085f3" name="setExpectedVarErrorMessage406"/>
+		<flow-ref doc:name="setExpectedVarErrorMessage415" doc:id="dc4a224a-1129-4c6b-8ed5-e3657f039562" name="setExpectedVarErrorMessage415"/>
+		<flow-ref doc:name="setExpectedVarErrorMessage500" doc:id="bb5be9aa-c7e3-4b5d-ba57-91ad7221118c" name="setExpectedVarErrorMessage500"/>
+	</munit:before-test>
+	<munit:test name="FuntionalTest-GivenANullCreateServiceOrderWhenPostRequestToServiceOrderAPIThenReturnA415ErrorMessage" description="FuntionalTest-GivenANullCreateServiceOrderWhenPostRequestToServiceOrderAPIThenReturnA415ErrorMessage" doc:id="9e0f82ca-9158-42ad-b927-90db37e7307b">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="post:\service\order:application\json:poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:execution >
+			<flow-ref doc:name="getCreateServiceRequestForTest" doc:id="15c5cc63-0f19-426d-bd5f-0bafb06d4eb6" name="getCreateServiceRequestForTest"/>
+			<ee:transform doc:name="Transform Message" doc:id="4c1b53cd-dcb6-40fd-b2cd-027a2158c0c2" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<try doc:name="Try" doc:id="8cfd72bc-0b60-44ab-aba6-7914cfc997bc" >
+				<http:request method="POST" doc:name="HTTP-POST-CreateServiceOrder" doc:id="fa7059f5-2712-449e-8c41-9eaa67b0e63b" config-ref="HTTP_API_TEST_Request_configuration" path="/service/order">
+				<http:response-validator>
+					<http:failure-status-code-validator values="500" />
+				</http:response-validator>
+			</http:request>
+				<error-handler >
+					<on-error-continue enableNotifications="false" logException="false" doc:name="On Error Continue" doc:id="8ec53f13-8aaa-4cb5-9e6c-c383ea142057" type="ANY"/>
+				</error-handler>
+			</try>
+		
+</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Response Message is Not Null" doc:id="1da229b1-ef2f-4d04-b1c6-1965ef818529" expression="#[payload]" is="#[MunitTools::notNullValue()]" message="Response Message is Null!!" />
+			<munit-tools:assert-that doc:name="Assert that Response Message is the expected Message" doc:id="4f99f5a7-f860-45bf-a9e1-47269689f10e" expression="#[payload]" is="#[MunitTools::equalTo(vars.errorMessage415 default '')]" message="Response Message is Null!!" />
+		
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenANullCreateServiceOrderWhenPostRequestToServiceOrderAPIThenReturnAHTTPSTATUS415" description="FuntionalTest-GivenANullCreateServiceOrderWhenPostRequestToServiceOrderAPIThenReturnAHTTPSTATUS415" doc:id="bd05c645-7b31-40f8-918a-8c6008c81667">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="post:\service\order:application\json:poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:execution >
+			<flow-ref doc:name="getCreateServiceRequestForTest" doc:id="5a3940c1-03da-4c15-9428-2eb866ac3846" name="getCreateServiceRequestForTest" />
+			<ee:transform doc:name="Transform Message" doc:id="e64dd515-89da-44fb-80ce-ff085fb07300" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<try doc:name="Try" doc:id="880a8162-b8e2-4989-859b-bec9f73bfc86" >
+				<http:request method="POST" doc:name="HTTP-POST-CreateServiceOrder" doc:id="fe762b2a-20cf-4341-9097-853768e0068e" config-ref="HTTP_API_TEST_Request_configuration" path="/service/order">
+				<http:response-validator>
+					<http:failure-status-code-validator values="500" />
+				</http:response-validator>
+			</http:request>
+				<error-handler >
+					<on-error-continue enableNotifications="false" logException="false" doc:name="On Error Continue" doc:id="eafe90bf-c9e2-4405-a636-bcd9b50d5bb4" type="ANY"/>
+				</error-handler>
+			</try>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Http Status Code is the expected" doc:id="f3ae961f-8d85-4658-a566-638e610df7ac" expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(415 default 200)]" message="Http Status Code is not the expected!!!" />
+			<munit-tools:assert-that doc:name="Assert that Http Reason Phrase is the expected" doc:id="9731bfc6-6402-4dbf-8284-413bbd115692" expression="#[attributes.reasonPhrase]" is="#[MunitTools::equalTo('Unsupported Media Type' default '')]" message="Http Status Code is not the expected!!!" />
+		</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenANullCreateServiceOrderWhenPostRequestToServiceOrderAPIThenReturnExpectedContentType" description="FuntionalTest-GivenANullCreateServiceOrderWhenPostRequestToServiceOrderAPIThenReturnExpectedContentType" doc:id="da713e6c-0d60-48c2-b401-7884c84a3072">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="post:\service\order:application\json:poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:execution >
+			<flow-ref doc:name="getCreateServiceRequestForTest" doc:id="a56fb20a-72aa-4dea-b15f-4918d1ee016e" name="getCreateServiceRequestForTest" />
+			<ee:transform doc:name="Transform Message" doc:id="fc163c5d-5ba8-45a1-854a-197078143f1d" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<try doc:name="Try" doc:id="f202c8a4-b83c-451b-a5d3-3255e17b71c8" >
+				<http:request method="POST" doc:name="HTTP-POST-CreateServiceOrder" doc:id="4bad4906-a48b-430d-b2f8-1df0ecd8a994" config-ref="HTTP_API_TEST_Request_configuration" path="/service/order">
+				<http:response-validator>
+					<http:failure-status-code-validator values="500" />
+				</http:response-validator>
+			</http:request>
+				<error-handler >
+					<on-error-continue enableNotifications="false" logException="false" doc:name="On Error Continue" doc:id="51312d6d-8573-44a2-85d0-6cb4321f6ee9" type="ANY"/>
+				</error-handler>
+			</try>
+		
+</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Http Content Type is the expected" doc:id="7be090e9-f7ea-4946-9ce3-ead7acc16ebd" expression="#[attributes.headers.'content-type']" is="#[MunitTools::equalTo('application/json; charset=UTF-8' default '')]" message="Http Content Type is not the expected!!!" />
+		
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenANullCreateServiceOrderWhenPostRequestToServiceOrderAPIThenVerifyThatTheRequestWasNotRoutedToAImplementation" description="FuntionalTest-GivenANullCreateServiceOrderWhenPostRequestToServiceOrderAPIThenVerifyThatTheRequestWasNotRoutedToAImplementation" doc:id="3601c3f1-bed6-4b1d-b759-ef7172a43fc1">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="post:\service\order:application\json:poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:execution >
+			<flow-ref doc:name="getCreateServiceRequestForTest" doc:id="1dbb47a5-061d-4ac0-9306-a99069b7c532" name="getCreateServiceRequestForTest" />
+			<ee:transform doc:name="Transform Message" doc:id="b7a083d9-fd51-4153-9e0c-46d600f87be9" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<try doc:name="Try" doc:id="dc5b3f03-b328-4735-acba-41b11b39aef9" >
+				<http:request method="POST" doc:name="HTTP-POST-CreateServiceOrder" doc:id="46973ad7-df70-4701-8b17-15887ec6c238" config-ref="HTTP_API_TEST_Request_configuration" path="/service/order">
+				<http:response-validator>
+					<http:failure-status-code-validator values="500" />
+				</http:response-validator>
+			</http:request>
+				<error-handler >
+					<on-error-continue enableNotifications="false" logException="false" doc:name="On Error Continue" doc:id="381c115a-aa7d-4f3a-b48a-7fa7c392f3db" type="ANY"/>
+				</error-handler>
+			</try>
+		
+</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call post:\service\order:application\json:poc_nisc_service_delivery_cms_system_api_v4-config" doc:id="8a09c4c2-f5e7-43a9-8eeb-0359eb8230d1" processor="mule:flow" times="0">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="post:\service\order:application\json:poc_nisc_service_delivery_cms_system_api_v4-config" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		
+
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenAnInvalidCreateServiceOrderWhenPostRequestToServiceOrderAPIThenReturnA400ErrorMessage" description="FuntionalTest-GivenAnInvalidCreateServiceOrderWhenPostRequestToServiceOrderAPIThenReturnA400ErrorMessage" doc:id="98664a6c-3aad-448a-b43c-04b227b63331">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="post:\service\order:application\json:poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:execution >
+			<ee:transform doc:name="Transform Message" doc:id="4c8c9591-19f4-48f8-95f1-d75eafecc048" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<try doc:name="Try" doc:id="1df084db-572e-415c-b45a-5b0616cc099e" >
+				<http:request method="POST" doc:name="HTTP-POST-CreateServiceOrder" doc:id="02ca5495-65d7-4b1a-a9e5-78f3b7313a30" config-ref="HTTP_API_TEST_Request_configuration" path="/service/order">
+				<http:response-validator>
+					<http:failure-status-code-validator values="500" />
+				</http:response-validator>
+			</http:request>
+				<error-handler >
+					<on-error-continue enableNotifications="false" logException="false" doc:name="On Error Continue" doc:id="7a9563e4-eafd-4b59-81d2-69c1e254109d" type="ANY"/>
+				</error-handler>
+			</try>
+		
+</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Response Message is Not Null" doc:id="443cda23-5006-453e-ab6f-b161347607f3" expression="#[payload]" is="#[MunitTools::notNullValue()]" message="Response Message is Null!!" />
+			<munit-tools:assert-that doc:name="Assert that Response Message is the expected Message" doc:id="2053c55a-55ef-4165-94ed-62fc757801b4" expression="#[payload]" is="#[MunitTools::equalTo(vars.errorMessage400 default '')]" message="Response Message is Null!!" />
+		
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenAnInvalidCreateServiceOrderWhenPostRequestToServiceOrderAPIThenReturnAHTTPSTATUS400" description="FuntionalTest-GivenAnInvalidCreateServiceOrderWhenPostRequestToServiceOrderAPIThenReturnAHTTPSTATUS400" doc:id="b16700da-b525-4641-9512-1b59aa2e72cc">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="post:\service\order:application\json:poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:execution >
+			<ee:transform doc:name="Transform Message" doc:id="9a766b93-daac-4356-afdd-ecff996b2551" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<try doc:name="Try" doc:id="35726cf6-a168-4e54-8818-2ce9b3b7ac59" >
+				<http:request method="POST" doc:name="HTTP-POST-CreateServiceOrder" doc:id="e54b5e57-8bf9-4cd6-8044-4ba5474da869" config-ref="HTTP_API_TEST_Request_configuration" path="/service/order">
+				<http:response-validator>
+					<http:failure-status-code-validator values="500" />
+				</http:response-validator>
+			</http:request>
+				<error-handler >
+					<on-error-continue enableNotifications="false" logException="false" doc:name="On Error Continue" doc:id="cb3de036-5f08-4425-9ca6-c409247f61f9" type="ANY"/>
+				</error-handler>
+			</try>
+		
+</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Http Status Code is the expected" doc:id="e668040e-fb1c-4376-88d0-8e1f46b271e5" expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(400 default 200)]" message="Http Status Code is not the expected!!!" />
+			<munit-tools:assert-that doc:name="Assert that Http Reason Phrase is the expected" doc:id="36784f44-53be-4f47-a550-1784741d04ad" expression="#[attributes.reasonPhrase]" is="#[MunitTools::equalTo('Bad Request' default '')]" message="Http Status Code is not the expected!!!" />
+		</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenAnInvalidCreateServiceOrderWhenPostRequestToServiceOrderAPIThenReturnExpectedContentType" description="FuntionalTest-GivenAnInvalidCreateServiceOrderWhenPostRequestToServiceOrderAPIThenReturnExpectedContentType" doc:id="a84a2487-e97d-4cf5-9b76-bbd047da670c">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="post:\service\order:application\json:poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:execution >
+			<ee:transform doc:name="Transform Message" doc:id="6a52cde5-edff-4e22-81fd-6ade36f063cf" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<try doc:name="Try" doc:id="f30016a3-e73a-40ac-a547-bedeffd17724" >
+				<http:request method="POST" doc:name="HTTP-POST-CreateServiceOrder" doc:id="8c5afdee-019a-4701-9712-89049fb45185" config-ref="HTTP_API_TEST_Request_configuration" path="/service/order">
+				<http:response-validator>
+					<http:failure-status-code-validator values="500" />
+				</http:response-validator>
+			</http:request>
+				<error-handler >
+					<on-error-continue enableNotifications="false" logException="false" doc:name="On Error Continue" doc:id="dc178392-2a0a-49b9-8281-35c62d3f3980" type="ANY"/>
+				</error-handler>
+			</try>
+		
+</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Http Content Type is the expected" doc:id="6e8c0375-7e37-4346-b412-a2cc31eb4ed5" expression="#[attributes.headers.'content-type']" is="#[MunitTools::equalTo('application/json; charset=UTF-8' default '')]" message="Http Content Type is not the expected!!!" />
+		
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenAnInvalidCreateServiceOrderWhenPostRequestToServiceOrderAPIThenVerifyThatTheRequestWasNotRoutedToAImplementation" description="FuntionalTest-GivenAnInvalidCreateServiceOrderWhenPostRequestToServiceOrderAPIThenVerifyThatTheRequestWasNotRoutedToAImplementation" doc:id="b3663de7-5ce6-4245-9513-d66d0407719c">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="post:\service\order:application\json:poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:execution >
+			<ee:transform doc:name="Transform Message" doc:id="a4e51aae-5ac3-4027-81e5-8bf861e98753" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<try doc:name="Try" doc:id="49833e24-16af-40ed-a83e-c50087645573" >
+				<http:request method="POST" doc:name="HTTP-POST-CreateServiceOrder" doc:id="ceb44f15-9611-4b80-a828-121cfc80cba5" config-ref="HTTP_API_TEST_Request_configuration" path="/service/order">
+				<http:response-validator>
+					<http:failure-status-code-validator values="500" />
+				</http:response-validator>
+			</http:request>
+				<error-handler >
+					<on-error-continue enableNotifications="false" logException="false" doc:name="On Error Continue" doc:id="e7dc2ea4-1c3c-4ca0-9c38-033b76cb7ad4" type="ANY"/>
+				</error-handler>
+			</try>
+		
+</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call post:\service\order:application\json:poc_nisc_service_delivery_cms_system_api_v4-config" doc:id="0d98ffa8-0620-4052-a2d4-f537bc6edee6" processor="mule:flow" times="0">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="post:\service\order:application\json:poc_nisc_service_delivery_cms_system_api_v4-config" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		
+
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenACreateServiceOrderWhenCallInvalidPostRequestToServiceOrderAPIThenReturnA404ErrorMessage" description="FuntionalTest-GivenACreateServiceOrderWhenCallInvalidPostRequestToServiceOrderAPIThenReturnA404ErrorMessage" doc:id="7d1ad7fd-a8ed-4e6c-9cc5-cf3cbac434cf">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="post:\service\order:application\json:poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:execution >
+			<flow-ref doc:name="getCreateServiceRequestForTest" doc:id="3c06c726-ab0a-492f-92cb-70813b0385db" name="getCreateServiceRequestForTest"/>
+			<try doc:name="Try" doc:id="64fdd3b9-6bbb-4da7-99ea-e7cb297e3ba7" >
+				<http:request method="POST" doc:name="HTTP-POST-CreateServiceOrder" doc:id="bc5538c0-2e1d-44c9-8309-72381d53d1d0" config-ref="HTTP_API_TEST_Request_configuration" path="/service/orders">
+				<http:response-validator>
+					<http:failure-status-code-validator values="500" />
+				</http:response-validator>
+			</http:request>
+				<error-handler >
+					<on-error-continue enableNotifications="false" logException="false" doc:name="On Error Continue" doc:id="b02cf308-f05d-4e8a-a07b-4c8f121fd5bb" type="ANY"/>
+				</error-handler>
+			</try>
+		
+</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Response Message is Not Null" doc:id="a0d5135a-f546-4606-a027-0a0c6634f441" expression="#[payload]" is="#[MunitTools::notNullValue()]" message="Response Message is Null!!" />
+			<munit-tools:assert-that doc:name="Assert that Response Message is the expected Message" doc:id="b60b8916-776b-45a1-96a8-c00710631cb7" expression="#[payload]" is="#[MunitTools::equalTo(vars.errorMessage404 default '')]" message="Response Message is Null!!" />
+		
+
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenAnInvalidCreateServiceOrderWhenCallInvalidPostRequestToServiceOrderAPIThenReturnAHTTPSTATUS404" description="FuntionalTest-GivenAnInvalidCreateServiceOrderWhenCallInvalidPostRequestToServiceOrderAPIThenReturnAHTTPSTATUS404" doc:id="51d881f3-7500-4a59-b439-e6b982559e4d">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="post:\service\order:application\json:poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:execution >
+			<flow-ref doc:name="getCreateServiceRequestForTest" doc:id="762ab8d4-8b61-44ed-a4fd-33c070171f16" name="getCreateServiceRequestForTest"/>
+			<try doc:name="Try" doc:id="432f1706-c673-494f-82fb-2fd65aeaf3b1" >
+				<http:request method="POST" doc:name="HTTP-POST-CreateServiceOrder" doc:id="7641b8cf-b7ca-47c4-a288-bba18a7478d3" config-ref="HTTP_API_TEST_Request_configuration" path="/service/orders">
+				<http:response-validator>
+					<http:failure-status-code-validator values="500" />
+				</http:response-validator>
+			</http:request>
+				<error-handler >
+					<on-error-continue enableNotifications="false" logException="false" doc:name="On Error Continue" doc:id="10b46a9c-f268-45a0-9e10-aee278f7107d" type="ANY"/>
+				</error-handler>
+			</try>
+		
+</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Http Status Code is the expected" doc:id="d75c99fd-fec5-4ba2-8190-5561da480e19" expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(404 default 200)]" message="Http Status Code is not the expected!!!" />
+			<munit-tools:assert-that doc:name="Assert that Http Reason Phrase is the expected" doc:id="320fb629-c2b5-4758-95e9-d55e7d68bf29" expression="#[attributes.reasonPhrase]" is="#[MunitTools::equalTo('Not Found' default '')]" message="Http Status Code is not the expected!!!" />
+		</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenACreateServiceOrderWhenCallInvalidPostRequestToServiceOrderAPIThenReturnExpectedContentType" description="FuntionalTest-GivenACreateServiceOrderWhenCallInvalidPostRequestToServiceOrderAPIThenReturnExpectedContentType" doc:id="f84fe949-1dd3-4ace-b852-5882561eab40">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="post:\service\order:application\json:poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:execution >
+			<flow-ref doc:name="getCreateServiceRequestForTest" doc:id="f0fc9b3a-7826-4bee-9ccf-8e57c3dcd387" name="getCreateServiceRequestForTest" />
+			<try doc:name="Try" doc:id="a72e995c-9e4b-48da-9a44-8623cb9c99ce" >
+				<http:request method="POST" doc:name="HTTP-POST-CreateServiceOrder" doc:id="6f2b0aac-aeeb-43ba-bd11-7865252cdadb" config-ref="HTTP_API_TEST_Request_configuration" path="/service/orders">
+				<http:response-validator>
+					<http:failure-status-code-validator values="500" />
+				</http:response-validator>
+			</http:request>
+				<error-handler >
+					<on-error-continue enableNotifications="false" logException="false" doc:name="On Error Continue" doc:id="72647c50-92f8-44e4-82c0-a000056f1d00" type="ANY"/>
+				</error-handler>
+			</try>
+		
+</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Http Content Type is the expected" doc:id="0350bc97-7a9e-42e1-8d51-9180e0a0cd01" expression="#[attributes.headers.'content-type']" is="#[MunitTools::equalTo('application/json; charset=UTF-8' default '')]" message="Http Content Type is not the expected!!!" />
+		
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenACreateServiceOrderWhenCallInvalidPostRequestToServiceOrderAPIThenVerifyThatTheRequestWasNotRoutedToAnImplementation" description="FuntionalTest-GivenACreateServiceOrderWhenCallInvalidPostRequestToServiceOrderAPIThenVerifyThatTheRequestWasNotRoutedToAnImplementation" doc:id="446b0aa9-029b-4e49-bfd0-1bd45595bceb">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="post:\service\order:application\json:poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:execution >
+			<flow-ref doc:name="getCreateServiceRequestForTest" doc:id="2d80949d-e93e-47a4-880c-d17e830102a3" name="getCreateServiceRequestForTest"/>
+			<try doc:name="Try" doc:id="3299fbb9-0934-40e7-b84c-53935156e6e6" >
+				<http:request method="POST" doc:name="HTTP-POST-CreateServiceOrder" doc:id="b278eb98-7a3d-4fab-82c0-edb8836d123e" config-ref="HTTP_API_TEST_Request_configuration" path="/service/orders">
+				<http:response-validator>
+					<http:failure-status-code-validator values="500" />
+				</http:response-validator>
+			</http:request>
+				<error-handler >
+					<on-error-continue enableNotifications="false" logException="false" doc:name="On Error Continue" doc:id="1723b11b-4695-4fa5-91c3-cd6618605b6e" type="ANY"/>
+				</error-handler>
+			</try>
+		
+</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="d9f5e64b-72a5-4634-8f32-4db4083113f1" processor="mule:flow" times="0">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="post:\service\order:application\json:poc_nisc_service_delivery_cms_system_api_v4-config" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		
+
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenACreateServiceOrderWhenPATCHRequestToServiceOrderAPIThenReturnA405ErrorMessage" description="FuntionalTest-GivenACreateServiceOrderWhenPATCHRequestToServiceOrderAPIThenReturnA405ErrorMessage" doc:id="32e0b849-6e72-4236-9e85-fe379b04fe35">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="post:\service\order:application\json:poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:execution >
+			<flow-ref doc:name="getCreateServiceRequestForTest" doc:id="bd86a139-928f-456d-9c00-c5d62b984e96" name="getCreateServiceRequestForTest"/>
+			<try doc:name="Try" doc:id="492475cb-c347-4cf8-a8a6-84ade400bfe4" >
+				<http:request method="PATCH" doc:name="HTTP-POST-CreateServiceOrder" doc:id="b525304c-5106-47f7-83a2-61011d20be89" config-ref="HTTP_API_TEST_Request_configuration" path="/service/order">
+				<http:response-validator>
+					<http:failure-status-code-validator values="500" />
+				</http:response-validator>
+			</http:request>
+				<error-handler >
+					<on-error-continue enableNotifications="false" logException="false" doc:name="On Error Continue" doc:id="de55f38b-f15c-4bb1-8036-b3eae65f2efb" type="ANY"/>
+				</error-handler>
+			</try>
+		
+</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Response Message is Not Null" doc:id="3a93555b-777d-4f5b-8a30-1232779c9520" expression="#[payload]" is="#[MunitTools::notNullValue()]" message="Response Message is Null!!" />
+			<munit-tools:assert-that doc:name="Assert that Response Message is the expected Message" doc:id="5e7e4022-b728-4a5d-b0f5-5190492ab09f" expression="#[payload]" is="#[MunitTools::equalTo(vars.errorMessage405 default '')]" message="Response Message is Null!!" />
+		
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenACreateServiceOrderWhenPATCHRequestToServiceOrderAPIThenReturnAHTTPSTATUS405" description="FuntionalTest-GivenACreateServiceOrderWhenPATCHRequestToServiceOrderAPIThenReturnAHTTPSTATUS405" doc:id="539a7fa2-3f4e-4eec-8b4a-8389a0b45ab8">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="post:\service\order:application\json:poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:execution >
+			<flow-ref doc:name="getCreateServiceRequestForTest" doc:id="99bd76ae-17a5-41d2-8527-a848e8325371" name="getCreateServiceRequestForTest"/>
+			<try doc:name="Try" doc:id="a7da5c87-3945-4d7e-baca-b6fcb08d6860" >
+				<http:request method="PATCH" doc:name="HTTP-POST-CreateServiceOrder" doc:id="10ce8e7c-82ce-43f9-8d95-0daafaf66705" config-ref="HTTP_API_TEST_Request_configuration" path="/service/order">
+				<http:response-validator>
+					<http:failure-status-code-validator values="500" />
+				</http:response-validator>
+			</http:request>
+				<error-handler >
+					<on-error-continue enableNotifications="false" logException="false" doc:name="On Error Continue" doc:id="f64f1791-aeb6-4f01-8f79-cf5ae5a352df" type="ANY"/>
+				</error-handler>
+			</try>
+		
+</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Http Status Code is the expected" doc:id="c50d271e-15ff-4b82-a936-b9154384bffb" expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(405 default 200)]" message="Http Status Code is not the expected!!!" />
+			<munit-tools:assert-that doc:name="Assert that Http Reason Phrase is the expected" doc:id="38976d59-a15d-41fa-bdd7-e5a7b1d319ee" expression="#[attributes.reasonPhrase]" is="#[MunitTools::equalTo('Method Not Allowed' default '')]" message="Http Status Code is not the expected!!!" />
+		
+
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenACreateServiceOrderWhenPATCHRequestToServiceOrderAPIThenReturnExpectedContentType" description="FuntionalTest-GivenACreateServiceOrderWhenPATCHRequestToServiceOrderAPIThenReturnExpectedContentType" doc:id="999f66f1-3d01-473a-affe-06d2bde9bbe6">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="post:\service\order:application\json:poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:execution >
+			<flow-ref doc:name="getCreateServiceRequestForTest" doc:id="a648ed29-ae80-48ad-8296-b64b657c21aa" name="getCreateServiceRequestForTest"/>
+			<try doc:name="Try" doc:id="d8919601-c410-431f-93de-7b66dbb3a087" >
+				<http:request method="PATCH" doc:name="HTTP-POST-CreateServiceOrder" doc:id="97707093-9b56-47bb-bca8-a321666d856b" config-ref="HTTP_API_TEST_Request_configuration" path="/service/order">
+				<http:response-validator>
+					<http:failure-status-code-validator values="500" />
+				</http:response-validator>
+			</http:request>
+				<error-handler >
+					<on-error-continue enableNotifications="false" logException="false" doc:name="On Error Continue" doc:id="39b8d620-82bd-49fb-9eb9-601a031f5bd2" type="ANY"/>
+				</error-handler>
+			</try>
+		
+</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Http Content Type is the expected" doc:id="0deac8a2-2cf3-462b-bc93-42574b1ff124" expression="#[attributes.headers.'content-type']" is="#[MunitTools::equalTo('application/json; charset=UTF-8' default '')]" message="Http Content Type is not the expected!!!" />
+		
+
+
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenACreateServiceOrderWhenPATCHRequestToServiceOrderAPIThenVerifyThatTheRequestWasNotRoutedToAnImplementation" description="FuntionalTest-GivenACreateServiceOrderWhenPATCHRequestToServiceOrderAPIThenVerifyThatTheRequestWasNotRoutedToAnImplementation" doc:id="a158f57c-a4d7-4ed9-b80a-77058b697e10">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="post:\service\order:application\json:poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:execution >
+			<flow-ref doc:name="getCreateServiceRequestForTest" doc:id="4c193bf4-aca3-42fc-a242-5af77114d85d" name="getCreateServiceRequestForTest"/>
+			<try doc:name="Try" doc:id="69b3473b-702f-4abb-b8fb-1a0b6da77721" >
+				<http:request method="PATCH" doc:name="HTTP-POST-CreateServiceOrder" doc:id="c6e4c69b-e109-4522-a0ea-d76a23c06d01" config-ref="HTTP_API_TEST_Request_configuration" path="/service/order">
+				<http:response-validator>
+					<http:failure-status-code-validator values="500" />
+				</http:response-validator>
+			</http:request>
+				<error-handler >
+					<on-error-continue enableNotifications="false" logException="false" doc:name="On Error Continue" doc:id="a6269259-fcd0-4069-a379-eaebdf4b0b1b" type="ANY"/>
+				</error-handler>
+			</try>
+		
+</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="12a035b0-ac50-49e4-a9ca-e346af3e84a8" processor="mule:flow" times="0">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="post:\service\order:application\json:poc_nisc_service_delivery_cms_system_api_v4-config" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		
+
+
+
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenAnInvalidAcceptContentTypeAsHeaderInCreateServiceOrderWhenPostRequestToServiceOrderAPIThenReturnA406ErrorMessage" description="FuntionalTest-GivenAnInvalidAcceptContentTypeAsHeaderInCreateServiceOrderWhenPostRequestToServiceOrderAPIThenReturnA406ErrorMessage" doc:id="d5dcd0ce-866d-4485-afe4-c749605fceb3">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="post:\service\order:application\json:poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:execution >
+			<flow-ref doc:name="getCreateServiceRequestForTest" doc:id="b4ebd5d2-cdaf-45ae-89fd-bff72408ba6b" name="getCreateServiceRequestForTest"/>
+			<try doc:name="Try" doc:id="7e1e8405-289a-4245-9c9d-29ab83185bb1" >
+				<http:request method="POST" doc:name="HTTP-POST-CreateServiceOrder" doc:id="1844771f-12fd-4336-8e91-fc3ccb72b855" config-ref="HTTP_API_TEST_Request_configuration" path="/service/order">
+				<http:headers><![CDATA[#[output application/java
+---
+{
+	"Accept" : "application/xml"
+}]]]></http:headers>
+				<http:response-validator>
+					<http:failure-status-code-validator values="500" />
+				</http:response-validator>
+			</http:request>
+				<error-handler >
+					<on-error-continue enableNotifications="false" logException="false" doc:name="On Error Continue" doc:id="11243a99-4594-46c5-9c85-dd1860c33284" type="ANY"/>
+				</error-handler>
+			</try>
+		
+</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Response Message is Not Null" doc:id="debbf398-562b-4735-b0e6-9f4cb3e3c52a" expression="#[payload]" is="#[MunitTools::notNullValue()]" message="Response Message is Null!!" />
+			<munit-tools:assert-that doc:name="Assert that Response Message is the expected Message" doc:id="d719f6fa-5fdf-43a9-a27a-29e61fd78001" expression="#[payload]" is="#[MunitTools::equalTo(vars.errorMessage406 default '')]" message="Response Message is Null!!" />
+		
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenAnInvalidAcceptContentTypeAsHeaderInCreateServiceOrderWhenPostRequestToServiceOrderAPIThenReturnAHTTPSTATUS406" description="FuntionalTest-GivenAnInvalidAcceptContentTypeAsHeaderInCreateServiceOrderWhenPostRequestToServiceOrderAPIThenReturnAHTTPSTATUS406" doc:id="571b0a17-40c9-45a2-9499-83ac9df7e15d">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="post:\service\order:application\json:poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:execution >
+			<flow-ref doc:name="getCreateServiceRequestForTest" doc:id="c5521a27-33d3-4cde-8811-8775e0bc76de" name="getCreateServiceRequestForTest"/>
+			<try doc:name="Try" doc:id="39c05799-0b1c-46da-8181-4e45a8fff129" >
+				<http:request method="POST" doc:name="HTTP-POST-CreateServiceOrder" doc:id="4d334579-ff5d-44fd-a34e-7d72bfb8a5da" config-ref="HTTP_API_TEST_Request_configuration" path="/service/order">
+				<http:headers><![CDATA[#[output application/java
+---
+{
+	"Accept" : "application/xml"
+}]]]></http:headers>
+				<http:response-validator>
+					<http:failure-status-code-validator values="500" />
+				</http:response-validator>
+			</http:request>
+				<error-handler >
+					<on-error-continue enableNotifications="false" logException="false" doc:name="On Error Continue" doc:id="364bfc39-689f-4fcf-a9c5-3101b0be9ae3" type="ANY"/>
+				</error-handler>
+			</try>
+		
+</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Http Status Code is the expected" doc:id="8ef30e58-d14f-4e79-9da6-7417e949b6fc" expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(406 default 200)]" message="Http Status Code is not the expected!!!" />
+			<munit-tools:assert-that doc:name="Assert that Http Reason Phrase is the expected" doc:id="d740cd8d-2548-4754-9c29-fb75517e236a" expression="#[attributes.reasonPhrase]" is="#[MunitTools::equalTo('Not Acceptable' default '')]" message="Http Status Code is not the expected!!!" />
+		
+
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenAnInvalidAcceptContentTypeAsHeaderInCreateServiceOrderWhenPostRequestToServiceOrderAPIThenReturnExpectedContentType" description="FuntionalTest-GivenAnInvalidAcceptContentTypeAsHeaderInCreateServiceOrderWhenPostRequestToServiceOrderAPIThenReturnExpectedContentType" doc:id="5fb09004-ad5f-4630-a6a7-814d2dd371e2">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="post:\service\order:application\json:poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:execution >
+			<flow-ref doc:name="getCreateServiceRequestForTest" doc:id="0babdf2c-4734-4c16-9e16-07ad06001d36" name="getCreateServiceRequestForTest"/>
+			<try doc:name="Try" doc:id="3d1c7c97-2153-46be-85ee-42ffb37c6a38" >
+				<http:request method="POST" doc:name="HTTP-POST-CreateServiceOrder" doc:id="94edde8a-7f85-4d83-856f-60e3a8fba018" config-ref="HTTP_API_TEST_Request_configuration" path="/service/order">
+				<http:headers><![CDATA[#[output application/java
+---
+{
+	"Accept" : "application/xml"
+}]]]></http:headers>
+				<http:response-validator>
+					<http:failure-status-code-validator values="500" />
+				</http:response-validator>
+			</http:request>
+				<error-handler >
+					<on-error-continue enableNotifications="false" logException="false" doc:name="On Error Continue" doc:id="d6f6cff0-dc0f-4abc-8a4f-0bfb28e9c8c1" type="ANY"/>
+				</error-handler>
+			</try>
+		
+</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Http Content Type is the expected" doc:id="93e68879-796e-4139-ac10-9c45bffbb32a" expression="#[attributes.headers.'content-type']" is="#[MunitTools::equalTo('application/json; charset=UTF-8' default '')]" message="Http Content Type is not the expected!!!" />
+		
+
+
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenAnInvalidAcceptContentTypeAsHeaderInCreateServiceOrderWhenPostRequestToServiceOrderAPIThenVerifyThatTheRequestWasNotRoutedToAnImplementation" description="FuntionalTest-GivenAnInvalidAcceptContentTypeAsHeaderInCreateServiceOrderWhenPostRequestToServiceOrderAPIThenVerifyThatTheRequestWasNotRoutedToAnImplementation" doc:id="0095bb8f-f912-4853-92b4-0b63f8656bbe">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="post:\service\order:application\json:poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:execution >
+			<flow-ref doc:name="getCreateServiceRequestForTest" doc:id="353844d6-3700-4391-9dc4-8ebaf2a4c883" name="getCreateServiceRequestForTest"/>
+			<try doc:name="Try" doc:id="989c3907-585a-48b2-9ea3-e307bc2806db" >
+				<http:request method="POST" doc:name="HTTP-POST-CreateServiceOrder" doc:id="094c4ab7-4e84-46f7-b42f-c919c796f4a5" config-ref="HTTP_API_TEST_Request_configuration" path="/service/order">
+				<http:headers><![CDATA[#[output application/java
+---
+{
+	"Accept" : "application/xml"
+}]]]></http:headers>
+				<http:response-validator>
+					<http:failure-status-code-validator values="500" />
+				</http:response-validator>
+			</http:request>
+				<error-handler >
+					<on-error-continue enableNotifications="false" logException="false" doc:name="On Error Continue" doc:id="1556919d-5533-40e9-b09a-b6447a0256b3" type="ANY"/>
+				</error-handler>
+			</try>
+		
+</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="628f5248-bf62-44ae-8cff-2718bdf98431" processor="mule:flow" times="0">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="post:\service\order:application\json:poc_nisc_service_delivery_cms_system_api_v4-config" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		
+
+
+
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenACreateServiceOrderWhenPostRequestToServiceOrderAPIAndSometingFailThenReturnA500ErrorMessage" description="FuntionalTest-GivenACreateServiceOrderWhenPostRequestToServiceOrderAPIAndSometingFailThenReturnA500ErrorMessage" doc:id="6476ef94-73e2-4cdb-96e7-88248e295021">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="post:\service\order:application\json:poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when call createAServiceOrderToProcess" doc:id="109405de-de4b-4ae4-a746-ec5fd05071d5" processor="mule:flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="createAServiceOrderToProcess" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="#['HTTP:INTERNAL_SERVER_ERROR']"/>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="getCreateServiceRequestForTest" doc:id="ed58a92f-8f9f-4077-9ad0-336acd494658" name="getCreateServiceRequestForTest"/>
+			<try doc:name="Try" doc:id="d6857517-9472-47b9-a335-e1bd0171b725" >
+				<http:request method="POST" doc:name="HTTP-POST-CreateServiceOrder" doc:id="9edcf81a-ce31-4bdf-a632-8f5761990e0b" config-ref="HTTP_API_TEST_Request_configuration" path="/service/order">
+					<http:response-validator >
+						<http:failure-status-code-validator values="400" />
+					</http:response-validator>
+			</http:request>
+				<error-handler >
+					<on-error-continue enableNotifications="false" logException="false" doc:name="On Error Continue" doc:id="6af08992-64d8-4e9c-9634-9b04ad0f8e09" type="ANY">
+					</on-error-continue>
+				</error-handler>
+			</try>
+			<logger level="INFO" doc:name="Logger" doc:id="41d176c7-8ed1-4b36-9d2a-e131efd591d0" message="Response: #[payload] expected: #[vars.errorMessage500]"/>
+</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Response Message is Not Null" doc:id="a64c8e06-14a9-4803-b414-1edd0515d58f" expression="#[payload]" is="#[MunitTools::notNullValue()]" message="Response Message is Null!!" />
+			<munit-tools:assert-that doc:name="Assert that Response Message is the expected Message" doc:id="e112074c-784a-4362-af67-a4af35b00732" expression="#[payload]" is="#[MunitTools::equalTo(vars.errorMessage500 default '')]" message="Response Message is Null!!" />
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenACreateServiceOrderWhenPostRequestToServiceOrderAPIAndSometingFailThenReturnAHTTPSTATUS500" description="FuntionalTest-GivenACreateServiceOrderWhenPostRequestToServiceOrderAPIAndSometingFailThenReturnAHTTPSTATUS500" doc:id="f7803af1-cfea-4a94-b782-2f02afb12f19">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="post:\service\order:application\json:poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when call createAServiceOrderToProcess" doc:id="8234d17a-72a0-4c42-9fa9-a6eeaf2d5633" processor="mule:flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="createAServiceOrderToProcess" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="#['HTTP:INTERNAL_SERVER_ERROR']"/>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="getCreateServiceRequestForTest" doc:id="29f0da21-4c58-4036-8642-5b546c032803" name="getCreateServiceRequestForTest"/>
+			<try doc:name="Try" doc:id="3d3ffb77-51e5-4b8f-b13a-1bfffff307db" >
+				<http:request method="POST" doc:name="HTTP-POST-CreateServiceOrder" doc:id="fe78cacf-d1ea-44b9-be43-6fe8da3b82f0" config-ref="HTTP_API_TEST_Request_configuration" path="/service/order">
+					<http:response-validator >
+						<http:failure-status-code-validator values="400" />
+					</http:response-validator>
+			</http:request>
+				<error-handler >
+					<on-error-continue enableNotifications="false" logException="false" doc:name="On Error Continue" doc:id="9df92614-b6a3-41f7-9a2a-41af01169822" type="ANY">
+					</on-error-continue>
+				</error-handler>
+			</try>
+			<logger level="INFO" doc:name="Logger" doc:id="53121a64-6df9-4e84-ac34-058af0b810b0" message="Response: #[payload] expected: #[vars.errorMessage500]"/>
+</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Http Status Code is the expected" doc:id="982d009b-b1ce-42ae-b4b9-3810d69f5f9f" expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(500 default 200)]" message="Http Status Code is not the expected!!!" />
+			<munit-tools:assert-that doc:name="Assert that Http Reason Phrase is the expected" doc:id="7c58097b-26e4-46d7-b15d-590e597afcb6" expression="#[attributes.reasonPhrase]" is="#[MunitTools::equalTo('Server Error' default '')]" message="Http Status Code is not the expected!!!" />
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenACreateServiceOrderWhenPostRequestToServiceOrderAPIAndSometingFailThenReturnExpectedContentType" description="FuntionalTest-GivenACreateServiceOrderWhenPostRequestToServiceOrderAPIAndSometingFailThenReturnExpectedContentType" doc:id="dbf1b8d4-b0ea-4e35-9e18-3e24d7cf026f">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="post:\service\order:application\json:poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when call createAServiceOrderToProcess" doc:id="04822337-2c98-481b-bb75-9e98ff2ec0eb" processor="mule:flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="createAServiceOrderToProcess" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="#['HTTP:INTERNAL_SERVER_ERROR']"/>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="getCreateServiceRequestForTest" doc:id="057251e7-eafe-4644-9ead-6938231d3428" name="getCreateServiceRequestForTest"/>
+			<try doc:name="Try" doc:id="e286dcc4-4500-486d-936b-515d6a59ccd5" >
+				<http:request method="POST" doc:name="HTTP-POST-CreateServiceOrder" doc:id="e882d4fc-9d9a-4aa8-a38e-01a7662ecf50" config-ref="HTTP_API_TEST_Request_configuration" path="/service/order">
+					<http:response-validator >
+						<http:failure-status-code-validator values="400" />
+					</http:response-validator>
+			</http:request>
+				<error-handler >
+					<on-error-continue enableNotifications="false" logException="false" doc:name="On Error Continue" doc:id="64152317-ffc4-49b5-8c37-a80121e79a82" type="ANY">
+					</on-error-continue>
+				</error-handler>
+			</try>
+			<logger level="INFO" doc:name="Logger" doc:id="35291d8f-c975-4d2b-8edb-b8c24cff67df" message="Response: #[payload] expected: #[vars.errorMessage500]"/>
+</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Http Content Type is the expected" doc:id="e54113ea-f6fe-4541-bfce-be68fbb3d81a" expression="#[attributes.headers.'content-type']" is="#[MunitTools::equalTo('application/json; charset=UTF-8' default '')]" message="Http Content Type is not the expected!!!" />
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenACreateServiceOrderWhenPostRequestToServiceOrderAPIAndSometingFailThenVerifyThatTheRequestWasRoutedToAnImplementation" description="FuntionalTest-GivenACreateServiceOrderWhenPostRequestToServiceOrderAPIAndSometingFailThenVerifyThatTheRequestWasRoutedToAnImplementation" doc:id="9a8a3a8c-a23f-4224-a39b-1883ebd81c94">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="post:\service\order:application\json:poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when call createAServiceOrderToProcess" doc:id="2c1fca28-5b22-49cf-96ed-a0908cbbac07" processor="mule:flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="createAServiceOrderToProcess" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="#['HTTP:INTERNAL_SERVER_ERROR']"/>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="getCreateServiceRequestForTest" doc:id="c3dd1432-1c69-4e99-ad3e-503a4cb75158" name="getCreateServiceRequestForTest"/>
+			<try doc:name="Try" doc:id="8d82a7a9-2af2-4cc8-a319-7a15e1110d9d" >
+				<http:request method="POST" doc:name="HTTP-POST-CreateServiceOrder" doc:id="ac020b7e-de5b-4558-b900-258cded22836" config-ref="HTTP_API_TEST_Request_configuration" path="/service/order">
+					<http:response-validator >
+						<http:failure-status-code-validator values="400" />
+					</http:response-validator>
+			</http:request>
+				<error-handler >
+					<on-error-continue enableNotifications="false" logException="false" doc:name="On Error Continue" doc:id="eee914ba-1ff7-4dcb-9931-e3f6b49f5ef2" type="ANY">
+					</on-error-continue>
+				</error-handler>
+			</try>
+			<logger level="INFO" doc:name="Logger" doc:id="0f80aea7-145e-4a88-815e-127a38349a40" message="Response: #[payload] expected: #[vars.errorMessage500]"/>
+</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="1738e92a-ad7d-44bc-9adf-878c2a9ec3f4" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="createAServiceOrderToProcess" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+
+</munit:validation>
+	</munit:test>
+</mule>
