@@ -86,6 +86,12 @@
             <classifier>mule-plugin</classifier>
             <scope>test</scope>
         </dependency>
+    	<dependency>
+            <groupId>18fb7fde-d35c-4b58-b297-07464da7ce2b.team-venezuela</groupId>
+            <artifactId>mule-plugin-poc_nisc_service_delivery_system_api</artifactId>
+            <version>1.0.1</version>
+            <classifier>mule-plugin</classifier>
+        </dependency>
     </dependencies>
 
 	<repositories>

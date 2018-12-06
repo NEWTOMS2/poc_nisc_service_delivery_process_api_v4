@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
+	xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<munit:config name="service_delivery_system_api_business-test-suite.xml" />
+	<munit:before-test name="service_delivery_system_api_business-test-suiteBefore_Test" description="Before tests actions" doc:id="a1ca62c9-91cb-4a91-a31c-781de81974bb" >
+		<flow-ref doc:name="getExpectedOrderDataFromSystem" doc:id="79e314ae-57a2-4a15-b24f-7feb229e1abc" name="getExpectedOrderDataFromSystem" />
+		<flow-ref doc:name="getExpectedServiceParametersFromSystem" doc:id="60c92d01-d1ad-4954-b166-4dea4002034c" name="getExpectedServiceParametersFromSystem" />
+		<flow-ref doc:name="getExpectedE7ViaCMSResponse" doc:id="e0a89abb-d55c-4123-8395-384d6b782664" name="getExpectedE7ViaCMSResponse" />
+		<flow-ref doc:name="getExpectedSubscriberIDFromSystem" doc:id="a49d1fb5-e612-41d1-a4af-12c8f3faeed6" name="getExpectedSubscriberIDFromSystem" />
+		<flow-ref doc:name="getExpectedCPEViaACSResponse" doc:id="f4a87298-0025-4ab7-898c-dbd54d8f5de5" name="getExpectedCPEViaACSResponse" />
+		<flow-ref doc:name="setExpectedPostCreateServiceResponse" doc:id="b9679c3b-a6bb-48cc-83c0-f2ae1fc02e94" name="setExpectedPostCreateServiceResponse" />
+	</munit:before-test>
+	<munit:test name="GivenACreateServiceRequestWhenCreateAServiceThenCallSystemToGetOrderData" description="GivenACreateServiceRequestWhenCreateAServiceThenCallSystemToGetOrderData" doc:id="73fdbf3a-e776-4840-b714-5735df08d20d" >
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="Mock when call getOrderDataFromSystem" doc:id="ad79212d-4270-4404-8661-666fb7ba26c2" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="getOrderDataFromSystem" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedOrderDataFromSystem]"/>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when call getServiceParametersFromSystem" doc:id="c55cfcd7-1a36-488a-b027-7f381241a1ed" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="getServiceParametersFromSystem" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedServiceParametersFromSystem]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when call configureE7ViaCMS" doc:id="6b982ffc-4e1e-46ce-a2f9-539e90def6c7" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="configureE7ViaCMS" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedE7ViaCMSResponse]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when call getSubscriberIDFromSystem" doc:id="680f32f4-a1aa-46e2-b18c-cbaf8184add8" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="getSubscriberIDFromSystem" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedSubscriberIDFromSystem]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when call configureCPEViaACS" doc:id="7f2e7563-936b-4244-8ba1-1123b323b080" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="configureCPEViaACS" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedCPEViaACSResponse]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when call buildCreateAServiceOrderResponse" doc:id="bfe5a8a6-6ef1-4224-b685-a57c077b25cd" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="buildCreateAServiceOrderResponse" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.postCreateServiceResponse]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="getCreateServiceRequestForTest" doc:id="ffb63a1b-e57c-4fd6-852e-c0399fbd07ea" name="getCreateServiceRequestForTest"/>
+			<flow-ref doc:name="Flow-ref to createAServiceOrderToProcess" doc:id="dc97bc45-69b2-4652-83b3-c39211fcbfec" name="createAServiceOrderToProcess"/>
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:verify-call doc:name="Verify call getOrderDataFromSystem" doc:id="1c28f099-1d7b-4b69-b7c0-9ac711575dc9" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="getOrderDataFromSystem" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="GivenACreateServiceRequestWhenCreateAServiceThenCallSystemToGetServiceParameters" description="GivenACreateServiceRequestWhenCreateAServiceThenCallSystemToGetServiceParameters" doc:id="13f82ba3-7201-4827-baa7-2a4219b17918" >
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="Mock when call getOrderDataFromSystem" doc:id="ba6d564b-4f42-4fd1-bdd4-7fc6cacda87b" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="getOrderDataFromSystem" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedOrderDataFromSystem]"/>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when call getServiceParametersFromSystem" doc:id="19cb9d26-5af7-449e-a8e7-f85fb5ae7203" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="getServiceParametersFromSystem" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedServiceParametersFromSystem]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when call configureE7ViaCMS" doc:id="656f120f-25a6-45cd-bc91-a082fcddc05a" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="configureE7ViaCMS" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedE7ViaCMSResponse]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when call getSubscriberIDFromSystem" doc:id="484bd849-beed-4e21-8d4e-164cd9bb6e85" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="getSubscriberIDFromSystem" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedSubscriberIDFromSystem]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when call configureCPEViaACS" doc:id="3a67048c-34e9-4a0e-aeea-90b927b8b450" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="configureCPEViaACS" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedCPEViaACSResponse]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when call buildCreateAServiceOrderResponse" doc:id="6209f81d-21ba-4d91-9c29-67aa6114085b" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="buildCreateAServiceOrderResponse" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.postCreateServiceResponse]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="getCreateServiceRequestForTest" doc:id="4a238f88-d39e-418c-9921-e1aad8e3734b" name="getCreateServiceRequestForTest"/>
+			<flow-ref doc:name="Flow-ref to createAServiceOrderToProcess" doc:id="c0104502-fea5-4f02-804c-2fb32f018984" name="createAServiceOrderToProcess"/>
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:verify-call doc:name="Verify call getServiceParametersFromSystem" doc:id="34f92dfa-f0ad-4e6a-9bed-a270ad484ef9" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="getServiceParametersFromSystem" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="GivenACreateServiceRequestWhenCreateAServiceThenCallCMSToConfigureE7" description="GivenACreateServiceRequestWhenCreateAServiceThenCallCMSToConfigureE7" doc:id="56e3a9dc-6e23-44e5-b6ce-e199fc85334a" >
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="Mock when call getOrderDataFromSystem" doc:id="796fc98b-f6d0-402e-9e56-0e52524da27f" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="getOrderDataFromSystem" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedOrderDataFromSystem]"/>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when call getServiceParametersFromSystem" doc:id="e282aca0-e80c-41e3-be8e-489cbda92833" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="getServiceParametersFromSystem" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedServiceParametersFromSystem]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when call configureE7ViaCMS" doc:id="b34574be-523a-4d6e-b3eb-3ad3c84bef74" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="configureE7ViaCMS" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedE7ViaCMSResponse]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when call getSubscriberIDFromSystem" doc:id="f204dfec-74dc-41cf-bbb0-8c39d6870661" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="getSubscriberIDFromSystem" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedSubscriberIDFromSystem]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when call configureCPEViaACS" doc:id="38651945-0a5a-445b-a61c-57aa8d90c8a2" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="configureCPEViaACS" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedCPEViaACSResponse]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when call buildCreateAServiceOrderResponse" doc:id="4973e056-40ac-4499-a585-8d7fc7a2461f" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="buildCreateAServiceOrderResponse" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.postCreateServiceResponse]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="getCreateServiceRequestForTest" doc:id="c5579075-a871-4cf0-b7b0-efac6d888570" name="getCreateServiceRequestForTest"/>
+			<flow-ref doc:name="Flow-ref to createAServiceOrderToProcess" doc:id="f534e5cc-37f3-4598-bd05-222b1d371385" name="createAServiceOrderToProcess"/>
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:verify-call doc:name="Verify call configureE7ViaCMS" doc:id="ecca82b3-2a48-4e80-bdac-9ed70db10810" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="configureE7ViaCMS" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="GivenACreateServiceRequestWhenCreateAServiceThenCallSystemToGetSubscriberID" description="GivenACreateServiceRequestWhenCreateAServiceThenCallSystemToGetSubscriberID" doc:id="60ab21cb-d395-4583-8460-38adbc9b2236" >
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="Mock when call getOrderDataFromSystem" doc:id="bbcdc97f-06f2-496e-aea1-ea9297ce6e4f" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="getOrderDataFromSystem" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedOrderDataFromSystem]"/>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when call getServiceParametersFromSystem" doc:id="5b50b9e8-74eb-4440-bad7-93bd9c3e5619" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="getServiceParametersFromSystem" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedServiceParametersFromSystem]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when call configureE7ViaCMS" doc:id="29a7f12b-ac9c-4c29-944c-d106b145708d" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="configureE7ViaCMS" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedE7ViaCMSResponse]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when call getSubscriberIDFromSystem" doc:id="2d64a65b-7096-4ada-8070-3fe8e59dc91a" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="getSubscriberIDFromSystem" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedSubscriberIDFromSystem]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when call configureCPEViaACS" doc:id="f54c3f03-ff8d-4dd3-91e0-3844e15bcb2c" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="configureCPEViaACS" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedCPEViaACSResponse]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when call buildCreateAServiceOrderResponse" doc:id="297a6524-c34b-4320-9b5f-448f85164a92" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="buildCreateAServiceOrderResponse" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.postCreateServiceResponse]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="getCreateServiceRequestForTest" doc:id="7395b2b2-f426-46d2-8dc0-38f02d3eefc8" name="getCreateServiceRequestForTest"/>
+			<flow-ref doc:name="Flow-ref to createAServiceOrderToProcess" doc:id="74c987b7-9daa-4d75-b8a2-0386be0e7b27" name="createAServiceOrderToProcess"/>
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:verify-call doc:name="Verify call getSubscriberIDFromSystem" doc:id="8b37851f-d68a-4d57-a9b7-5c0edd176e7a" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="getSubscriberIDFromSystem" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="GivenACreateServiceRequestWhenCreateAServiceThenCallACSToConfigureCPE" description="GivenACreateServiceRequestWhenCreateAServiceThenCallACSToConfigureCPE" doc:id="11a7200b-9b55-47ad-a42c-27c6b64f06af" >
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="Mock when call getOrderDataFromSystem" doc:id="a3fe2d9b-7931-43aa-a4ab-6183ad21c87e" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="getOrderDataFromSystem" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedOrderDataFromSystem]"/>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when call getServiceParametersFromSystem" doc:id="fcc710a3-2f3c-4736-add2-6fd2e508dbe8" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="getServiceParametersFromSystem" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedServiceParametersFromSystem]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when call configureE7ViaCMS" doc:id="c6ba36d3-740e-454c-9d91-162a59151c85" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="configureE7ViaCMS" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedE7ViaCMSResponse]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when call getSubscriberIDFromSystem" doc:id="5a28918e-883b-4081-8567-cdbab27c6264" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="getSubscriberIDFromSystem" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedSubscriberIDFromSystem]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when call configureCPEViaACS" doc:id="88b7dcee-388e-4c55-8885-e584048ec116" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="configureCPEViaACS" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedCPEViaACSResponse]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when call buildCreateAServiceOrderResponse" doc:id="be48ee6d-a186-4988-891b-3df494971878" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="buildCreateAServiceOrderResponse" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.postCreateServiceResponse]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="getCreateServiceRequestForTest" doc:id="df002c68-25ce-46e5-a6a1-9b88c42ff2ab" name="getCreateServiceRequestForTest"/>
+			<flow-ref doc:name="Flow-ref to createAServiceOrderToProcess" doc:id="e3099edf-e622-4eb2-86fb-eee8ce062985" name="createAServiceOrderToProcess"/>
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:verify-call doc:name="Verify call configureCPEViaACS" doc:id="03311861-bcb9-4aef-924d-e67ed6a68020" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="configureCPEViaACS" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="GivenACreateServiceRequestWhenCreateAServiceThenBuildCreateAServiceOrderResponse" description="GivenACreateServiceRequestWhenCreateAServiceThenBuildCreateAServiceOrderResponse" doc:id="7a3e4c1c-ddbe-430d-a9d0-8ee1487d6161" >
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="Mock when call getOrderDataFromSystem" doc:id="46e13998-06d3-4448-a9bc-7f7a245fbab1" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="getOrderDataFromSystem" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedOrderDataFromSystem]"/>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when call getServiceParametersFromSystem" doc:id="6efbfa51-9c79-490b-843f-2f375adddf71" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="getServiceParametersFromSystem" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedServiceParametersFromSystem]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when call configureE7ViaCMS" doc:id="31744c10-4a8e-4a92-8788-0eff73561584" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="configureE7ViaCMS" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedE7ViaCMSResponse]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when call getSubscriberIDFromSystem" doc:id="34a96d67-6fa3-48d5-81f7-0b9c69e177eb" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="getSubscriberIDFromSystem" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedSubscriberIDFromSystem]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when call configureCPEViaACS" doc:id="a13d0079-03f6-445b-8d27-df2f7822e909" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="configureCPEViaACS" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedCPEViaACSResponse]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when call buildCreateAServiceOrderResponse" doc:id="c30368f6-73a0-493a-a896-3e16202f3d19" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="buildCreateAServiceOrderResponse" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.postCreateServiceResponse]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="getCreateServiceRequestForTest" doc:id="efea6fc0-fecf-4e3f-8c57-739e5e7346cc" name="getCreateServiceRequestForTest"/>
+			<flow-ref doc:name="Flow-ref to createAServiceOrderToProcess" doc:id="eb7dcb8e-301a-4562-8419-27c0ca6bd43a" name="createAServiceOrderToProcess"/>
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:verify-call doc:name="Verify call buildCreateAServiceOrderResponse" doc:id="9d2ef90b-e933-4b8b-9d82-13b063e7992c" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="buildCreateAServiceOrderResponse" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="GivenACreateServiceRequestWhenBuildCreateAServiceOrderResponseThenReturnAValidResponse" description="GivenACreateServiceRequestWhenBuildCreateAServiceOrderResponseThenReturnAValidResponse" doc:id="c8e4f6e4-1d1e-4e7d-aa91-ba09e1cf973d" >
+		<munit:execution >
+			<flow-ref doc:name="getCreateServiceRequestForTest" doc:id="213c422b-2ca8-4062-97de-6e054abc7d0a" name="getCreateServiceRequestForTest" />
+			<flow-ref doc:name="buildCreateAServiceOrderResponse" doc:id="6fe77d17-3cba-4b7c-b722-dec1be18611c" name="buildCreateAServiceOrderResponse"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Response Message is Not Null" doc:id="087b7df7-1f3b-4571-a58d-23218fcd5c2b" expression="#[payload]" is="#[MunitTools::notNullValue()]" message="Response Message is Null!!" />
+			<munit-tools:assert-that doc:name="Assert that Response Message is the expected Message" doc:id="674a8053-9c57-4408-8499-4044d103f5bc" expression="#[payload]" is="#[MunitTools::equalTo(vars.postCreateServiceResponse default '')]" message="Response Message is Null!!" />
+		</munit:validation>
+	</munit:test>
+</mule>

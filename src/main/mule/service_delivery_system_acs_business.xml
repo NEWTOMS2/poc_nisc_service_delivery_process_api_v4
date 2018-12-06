@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:pocni-scservice-delivery-system-api="http://www.mulesoft.org/schema/mule/pocni-scservice-delivery-system-api" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/pocni-scservice-delivery-system-api http://www.mulesoft.org/schema/mule/pocni-scservice-delivery-system-api/current/mule-pocni-scservice-delivery-system-api.xsd">
+	<pocni-scservice-delivery-system-api:config name="POC_NiSC_Service_Delivery_System_ACS_API_Config" doc:name="POC NiSC Service Delivery System API Config" doc:id="569ec212-211c-4c3a-b242-3343035a19af" />
+	<sub-flow name="configureCPEViaACS" doc:id="29df13d7-368c-46f7-8ba8-89e10491f7ac" >
+		<pocni-scservice-delivery-system-api:create-a-service-order doc:name="Create a service order ACS" doc:id="5e2e2414-2776-4515-b192-ac96de5a3aa1" config-ref="POC_NiSC_Service_Delivery_System_ACS_API_Config"/>
+	</sub-flow>
+</mule>

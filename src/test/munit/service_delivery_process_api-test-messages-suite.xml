@@ -10,6 +10,167 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
 		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
 	<munit:config name="service_delivery_cms_system_api-test-messages-suite.xml" />
+	<sub-flow name="getExpectedCPEViaACSResponse" doc:id="09f5a1a2-5411-4b3e-9c9d-f6324ab8c0e7" >
+		<ee:transform doc:name="Transform Message" doc:id="2e7aa8de-bd4e-49a1-8272-e954e3ee57a5">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="expectedCPEViaACSResponse"><![CDATA[%dw 2.0
+output application/json
+---
+{
+  id: 1234,
+  state: "Active",
+  serviceSpecification: {
+    id: "conferenceBridgeEquipment",
+    href: "http://serverlocation:port/catalogManagement/serviceSpecification /conferenceBridgeEquipment"
+  },
+  serviceCharacteristic: [
+    {
+      name: "numberOfVc500Units",
+      value: "1"
+    }, 
+    {
+      name: "numberOfVc100Units",
+      value: "2"
+    }, 
+    {
+      name: "routerType",
+      value: "CiscoASR1000"
+    }, 
+    {
+      name: "powerSupply",
+      value: "UK"
+    }
+  ],
+  relatedParty: [
+    {
+      role: "Subscriber",
+      id: "1234",
+      href: "http://serverLocation:port/partyManagement/partyRole/1234"
+    }
+  ],
+  links: [
+    {
+      rel: "/linkrels/service/order/info",
+      uri: "/service/order/1234",
+      method: "GET"
+    }, 
+    {
+      rel: "/linkrels/service/order/updateInfo",
+      uri: "/service/order/1234",
+      method: "PUT"
+    }, 
+    {
+      rel: "/linkrels/service/order/delete",
+      uri: "/service/order/1234",
+      method: "DELETE"
+    }
+  ]
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="getExpectedSubscriberIDFromSystem" doc:id="2750f6c9-0de1-4cf4-9f3c-94c134bd42f9" >
+		<ee:transform doc:name="Transform Message" doc:id="c6e4600c-220c-4517-bb2d-9a3285f98005">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="expectedSubscriberIDFromSystem"><![CDATA[%dw 2.0
+output application/java
+---
+{
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="getExpectedE7ViaCMSResponse" doc:id="278bbbb4-f7b3-4603-8a5c-ff12dc551eb8" >
+		<ee:transform doc:name="Transform Message" doc:id="489b98c5-82ef-4560-884a-3de6a23dd451">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="expectedE7ViaCMSResponse"><![CDATA[%dw 2.0
+output application/json
+---
+{
+  id: 1234,
+  state: "Active",
+  serviceSpecification: {
+    id: "conferenceBridgeEquipment",
+    href: "http://serverlocation:port/catalogManagement/serviceSpecification /conferenceBridgeEquipment"
+  },
+  serviceCharacteristic: [
+    {
+      name: "numberOfVc500Units",
+      value: "1"
+    }, 
+    {
+      name: "numberOfVc100Units",
+      value: "2"
+    }, 
+    {
+      name: "routerType",
+      value: "CiscoASR1000"
+    }, 
+    {
+      name: "powerSupply",
+      value: "UK"
+    }
+  ],
+  relatedParty: [
+    {
+      role: "Subscriber",
+      id: "1234",
+      href: "http://serverLocation:port/partyManagement/partyRole/1234"
+    }
+  ],
+  links: [
+    {
+      rel: "/linkrels/service/order/info",
+      uri: "/service/order/1234",
+      method: "GET"
+    }, 
+    {
+      rel: "/linkrels/service/order/updateInfo",
+      uri: "/service/order/1234",
+      method: "PUT"
+    }, 
+    {
+      rel: "/linkrels/service/order/delete",
+      uri: "/service/order/1234",
+      method: "DELETE"
+    }
+  ]
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="getExpectedServiceParametersFromSystem" doc:id="44253677-c56a-44e8-a057-977dd577a35a" >
+		<ee:transform doc:name="Transform Message" doc:id="370f93e6-92ba-498e-96b8-153111ba452e">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="expectedServiceParametersFromSystem"><![CDATA[%dw 2.0
+output application/java
+---
+{
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="getExpectedOrderDataFromSystem" doc:id="3e2026ca-d769-411f-b292-b328531eaca5" >
+		<ee:transform doc:name="Transform Message" doc:id="d0a7614f-9d26-40ce-b979-39040f59849c">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="expectedOrderDataFromSystem"><![CDATA[%dw 2.0
+output application/java
+---
+{
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+	</sub-flow>
 	<sub-flow name="setExpectedPutUpdateServiceOrderResponse" doc:id="c5ac95fe-1cd3-420e-a8cc-d21dc5e88da6" >
 		<ee:transform doc:name="Transform Message" doc:id="15bc564b-75eb-45ff-bdef-b2a74825079d" >
 			<ee:message >
