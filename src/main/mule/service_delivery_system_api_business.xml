@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+<mule xmlns:pocni-scservice-delivery-system-api="http://www.mulesoft.org/schema/mule/pocni-scservice-delivery-system-api" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/pocni-scservice-delivery-system-api http://www.mulesoft.org/schema/mule/pocni-scservice-delivery-system-api/current/mule-pocni-scservice-delivery-system-api.xsd">
 	<sub-flow name="createAServiceOrderToProcess" doc:id="f8b978a4-161f-4819-894e-320a795177af" >
+		<flow-ref doc:name="getOrderDataFromSystem" doc:id="6ba317b6-874a-4c5c-9689-98d49b2bbc6c" name="getOrderDataFromSystem" />
+		<flow-ref doc:name="getServiceParametersFromSystem" doc:id="ff560234-b7ed-4bf4-906c-124c0401f3bb" name="getServiceParametersFromSystem" />
+		<flow-ref doc:name="configureE7ViaCMS" doc:id="03fbe2e5-d557-43d6-8b57-41d2945b274b" name="configureE7ViaCMS" />
+		<flow-ref doc:name="getSubscriberIDFromSystem" doc:id="f38a0336-abc7-4004-bec5-5818144f7bdd" name="getSubscriberIDFromSystem" />
+		<flow-ref doc:name="configureCPEViaACS" doc:id="ce1f1c3c-0dde-41ee-9cad-17ce6ded6ea5" name="configureCPEViaACS" />
+		<flow-ref doc:name="buildCreateAServiceOrderResponse" doc:id="b1fea572-abb1-4c4b-985b-a2c1d7413bbe" name="buildCreateAServiceOrderResponse" />
+	
+</sub-flow>
+	<sub-flow name="buildCreateAServiceOrderResponse" doc:id="6c63404a-e786-43fd-91d5-0fa4c3e2c2ea">
 		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
-http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="beb2a29f-d017-4316-9278-a96d03f362f4">
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="beb2a29f-d017-4316-9278-a96d03f362f4" doc:name="TransformMessageServiceOrderResponse">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json

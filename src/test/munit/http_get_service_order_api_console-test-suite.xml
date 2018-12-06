@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:http="http://www.mulesoft.org/schema/mule/http"
+<mule xmlns:tls="http://www.mulesoft.org/schema/mule/tls"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
 	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
 	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd 
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd 
 		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
@@ -13,7 +15,11 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
 	<munit:config name="http_get_service_order_api_console-test-suite.xml" />
 	<http:request-config name="HTTP_Console_Test_Request_configuration" doc:name="HTTP Request configuration" doc:id="49287de8-e80b-4a64-ada9-185cd9c3b33b" >
-		<http:request-connection host="localhost" port="8081" />
+		<http:request-connection  host="localhost" port="8082" protocol="HTTPS" >
+			<tls:context>
+				<tls:trust-store insecure="true"/>
+			</tls:context> 
+		</http:request-connection>
 	</http:request-config>
 	<munit:before-test name="http_get_service_order_api_console-test-suiteBefore_Test" description="Before tests actions" doc:id="77233508-8a8f-46d4-9910-793da5435796" >
 		<flow-ref doc:name="setExpectedVarErrorMessage404" doc:id="8fa60122-e0d1-4424-a0b8-6e1fab590821" name="setExpectedVarErrorMessage404"/>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<sub-flow name="getSubscriberIDFromSystem" doc:id="6cd48e05-3822-4d87-951d-880249d93de9" >
+		<logger level="INFO" doc:name="Logger Get Subscriber ID" doc:id="a6324edd-53bb-4da8-953d-bec0ab396509" message="Get Subscriber ID" />
+	</sub-flow>
+	<sub-flow name="getServiceParametersFromSystem" doc:id="953300e4-430d-4da1-8706-e03bc9a9b545" >
+		<logger level="INFO" doc:name="Logger Get Service Parameters" doc:id="107a5245-f9fe-4051-a07e-4cc169196acd" message="Get Service Parameters" />
+	</sub-flow>
+	<sub-flow name="getOrderDataFromSystem" doc:id="d322266c-a225-49ba-b496-198ee996cc5b" >
+		<logger level="INFO" doc:name="Logger Get Order Data" doc:id="f062e569-b246-432f-917e-4457d3d3a373" message="Get Order Data" />
+	</sub-flow>
+</mule>
