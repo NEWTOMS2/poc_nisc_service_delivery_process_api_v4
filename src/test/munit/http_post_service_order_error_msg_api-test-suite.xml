@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:http="http://www.mulesoft.org/schema/mule/http"
+<mule xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:http="http://www.mulesoft.org/schema/mule/http"
 	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
@@ -10,10 +10,15 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd 
 		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
-		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
+		http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd">
 	<munit:config name="http_post_service_order_error_msg_api-test-suite.xml" />
-	<http:request-config name="HTTP_API_TEST_Request_configuration" doc:name="HTTP Request configuration" doc:id="da91855d-8c83-4663-956c-e2ad4f1d6b87" basePath="/api" >
-		<http:request-connection host="localhost" port="8081" />
+	<http:request-config name="HTTP_API_TEST_Request_configuration" doc:name="HTTP Request configuration" doc:id="da91855d-8c83-4663-956c-e2ad4f1d6b87" basePath="/api">
+		<http:request-connection  host="localhost" port="8082" protocol="HTTPS" >
+			<tls:context>
+				<tls:trust-store insecure="true"/>
+			</tls:context> 
+		</http:request-connection>
 	</http:request-config>
 	<munit:before-test name="http_post_service_order_error_msg_api-test-suiteBefore_Test" description="Before tests actions" doc:id="ca45b8de-c66d-484c-9240-dcad761de105" >
 		<flow-ref doc:name="setExpectedVarErrorMessage400" doc:id="bf11ab7c-6110-4ca7-994d-77caaa441e57" name="setExpectedVarErrorMessage400"/>
