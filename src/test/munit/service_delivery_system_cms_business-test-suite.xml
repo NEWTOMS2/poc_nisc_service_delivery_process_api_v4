@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
+	xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<munit:config name="service_delivery_system_cms_business-test-suite.xml" />
+	<munit:before-test name="service_delivery_system_cms_business-test-suiteBefore_Test" description="Before tests actions" doc:id="86d05a10-166f-4245-9904-7e06469fab62" >
+		<ee:transform doc:name="Transform Message" doc:id="8bbbaa76-4af2-483e-8f5e-76146c19a938" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="expectedConfigureE7ViaCMSResponse" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+   id: 1234,
+   state:"Active",
+   serviceSpecification:{
+      id:"conferenceBridgeEquipment",
+      href:"http://serverlocation:port/catalogManagement/serviceSpecification /conferenceBridgeEquipment"
+   },
+   serviceCharacteristic:[
+      {
+         name:"numberOfVc500Units",
+         value:"1"
+      },
+      {
+         name:"numberOfVc100Units",
+         value:"2"
+      },
+      {
+         name:"routerType",
+         value:"CiscoASR1000"
+      },
+      {
+         name:"powerSupply",
+         value:"UK"
+      }
+   ],
+   relatedParty:[
+      {
+         role:"Subscriber",
+         id:"1234",
+         href:"http://serverLocation:port/partyManagement/partyRole/1234"
+      }
+   ],
+   links:[
+      {
+         rel:"/linkrels/service/order/info",
+         uri:"/service/order/1234",
+         method:"GET"
+      },
+      {
+         rel:"/linkrels/service/order/updateInfo",
+         uri:"/service/order/1234",
+         method:"PUT"
+      },
+      {
+         rel:"/linkrels/service/order/delete",
+         uri:"/service/order/1234",
+         method:"DELETE"
+      }
+   ]
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+	</munit:before-test>
+	<munit:test name="Functional_GivenACreateServiceRequestWhenConfigureE7ViaCMSThenReturnAValidResponse" description="Functional_GivenACreateServiceRequestWhenConfigureE7ViaCMSThenReturnAValidResponse" doc:id="e5b01001-6537-4545-abe9-5e23b4663721" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="0fab3152-aa8c-4d00-b7d8-395742603a90" processor="pocni-scservice-delivery-system-api:create-a-service-order">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="doc:name" whereValue="Create a service order CMS" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedConfigureE7ViaCMSResponse]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="getCreateServiceRequestForTest" doc:id="1191b233-ce29-4e56-aaeb-16443aaf984d" name="getCreateServiceRequestForTest" />
+			<flow-ref doc:name="Flow-ref to configureE7ViaCMS" doc:id="bcfb5a04-572a-4d62-b644-1bf1f85fc596" name="configureE7ViaCMS"/>
+			<logger level="INFO" doc:name="Logger" doc:id="cf34216a-4281-4172-b606-4fa9d1958ca9" message="Response: #[payload]"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Response Message is Not Null" doc:id="b1a97673-fe12-4a59-86ff-d85d3afb93cf" expression="#[payload]" is="#[MunitTools::notNullValue()]" message="Response Message is Null!!" />
+			<munit-tools:assert-that doc:name="Assert that Response Message is the expected Message" doc:id="2d893658-96f6-48b1-82d8-daf7b1188e9d" expression="#[payload]" is="#[MunitTools::equalTo(vars.expectedConfigureE7ViaCMSResponse default '')]" message="Response Message is Null!!" />
+		</munit:validation>
+	</munit:test>
+
+
+</mule>

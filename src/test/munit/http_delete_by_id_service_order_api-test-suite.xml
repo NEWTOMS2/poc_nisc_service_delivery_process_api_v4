@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd 
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="http_delete_by_id_service_order_api-test-suite.xml" />
+	<munit:test name="FuntionalTest-GivenARequestWhenDeleteByIdAServiceOrderThenReturnAValidResponse" description="FuntionalTest-GivenARequestWhenDeleteByIdAServiceOrderThenReturnAValidResponse" doc:id="6476ef94-73e2-4cdb-96e7-88248e295021">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="delete:\service\order\(id):poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when call deleteServiceOrderById" doc:id="109405de-de4b-4ae4-a746-ec5fd05071d5" processor="mule:flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="deleteServiceOrderById" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[null]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="requestHTTPDeleteServiceOrderById" doc:id="d4f3fa9d-5ecb-4c1e-83f6-510c5dc9e08f" name="requestHTTPDeleteServiceOrderById" />
+			<ee:transform doc:name="Transform Message" doc:id="a2bf66aa-27dd-44fd-8954-94354c772442" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+</munit:execution>
+		<munit:validation>
+			<munit-tools:assert-that doc:name="Assert that Response Message is the expected Message" doc:id="63ab93d2-d4d0-43e1-9c5d-f05183df3cf3" expression="#[payload]" is="#[MunitTools::equalTo('' default '')]" message="Response Message is Null!!" />
+</munit:validation>
+	
+</munit:test>
+	<munit:test name="FuntionalTest-GivenARequestWhenDeleteByIdAServiceOrderThenReturnAHTTPSTATUS200" description="FuntionalTest-GivenARequestWhenDeleteByIdAServiceOrderThenReturnAHTTPSTATUS200" doc:id="f7803af1-cfea-4a94-b782-2f02afb12f19">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="delete:\service\order\(id):poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when call deleteServiceOrderById" doc:id="7055b65e-4fca-4d3c-bf25-aeef9c49bee7" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="deleteServiceOrderById" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[null]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		
+</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="requestHTTPDeleteServiceOrderById" doc:id="f278c747-004b-4cb7-a931-2a7541f2f89d" name="requestHTTPDeleteServiceOrderById" />
+
+</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Http Status Code is the expected" doc:id="982d009b-b1ce-42ae-b4b9-3810d69f5f9f" expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(200 default 200)]" message="Http Status Code is not the expected!!!" />
+			<munit-tools:assert-that doc:name="Assert that Http Reason Phrase is the expected" doc:id="7c58097b-26e4-46d7-b15d-590e597afcb6" expression="#[attributes.reasonPhrase]" is="#[MunitTools::equalTo('OK' default '')]" message="Http Status Code is not the expected!!!" />
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenARequestWhenDeleteByIdAServiceOrderThenReturnExpectedContentType" description="FuntionalTest-GivenARequestWhenDeleteByIdAServiceOrderThenReturnExpectedContentType" doc:id="dbf1b8d4-b0ea-4e35-9e18-3e24d7cf026f">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="delete:\service\order\(id):poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when call deleteServiceOrderById" doc:id="240b1321-bf24-4edf-b060-e7a31a87982c" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="deleteServiceOrderById" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[null]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		
+</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="requestHTTPDeleteServiceOrderById" doc:id="a18fd6fe-b1bc-4c86-b70f-2deabb44f08c" name="requestHTTPDeleteServiceOrderById" />
+
+</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Http Content Type is the expected" doc:id="e54113ea-f6fe-4541-bfce-be68fbb3d81a" expression="#[attributes.headers.'content-type']" is="#[MunitTools::equalTo('application/java; charset=windows-1252' default '')]" message="Http Content Type is not the expected!!!" />
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenARequestWhenDeleteByIdAServiceOrderThenGetIdFromURI" description="FuntionalTest-GivenARequestWhenDeleteByIdAServiceOrderThenGetIdFromURI" doc:id="9a8a3a8c-a23f-4224-a39b-1883ebd81c94">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="delete:\service\order\(id):poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:behavior >
+			<munit-tools:spy doc:name="Spy Call deleteServiceOrderById" doc:id="06da06dd-72ee-43be-a11b-8107694448d3" processor="mule:flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="getServiceOrderById" />
+				</munit-tools:with-attributes>
+				<munit-tools:before-call >
+					<munit-tools:assert-that doc:name="Assert that Http URI Id Param is the expected" doc:id="e983d392-0a53-4296-a737-07d7c6b9f32f" expression="#[vars.id]" is="#[MunitTools::equalTo('1' default '0')]" message="Http URI Id Param is not the expected!!!" />
+				</munit-tools:before-call>
+			</munit-tools:spy>
+			<munit-tools:mock-when doc:name="Mock when call deleteServiceOrderById" doc:id="0de959a5-5cde-4d47-a57a-aff8f0eec637" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="deleteServiceOrderById" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[null]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		
+</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="requestHTTPDeleteServiceOrderById" doc:id="c9c07448-3585-4acf-8547-8482766ef82a" name="requestHTTPDeleteServiceOrderById" />
+
+</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="1738e92a-ad7d-44bc-9adf-878c2a9ec3f4" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="setOrderIdVaribleFromURIId" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenARequestWhenDeleteByIdAServiceOrderThenVerifyThatTheRequestWasRoutedToRigthImplementation" description="FuntionalTest-GivenARequestWhenDeleteByIdAServiceOrderThenVerifyThatTheRequestWasRoutedToRigthImplementation" doc:id="4fe8dd85-1502-451f-959c-df8ca1a9a448">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="delete:\service\order\(id):poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when call deleteServiceOrderById" doc:id="2c45fd69-90b0-4f68-bd10-d218e9ac3a11" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="deleteServiceOrderById" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[null]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		
+
+</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="requestHTTPDeleteServiceOrderById" doc:id="b9fa1d00-aecd-45c6-971d-199b600bb728" name="requestHTTPDeleteServiceOrderById" />
+
+</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="58be4105-0717-427e-949e-dd7e63fafb42" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="deleteServiceOrderById" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenARequestWhenDeleteByIdAServiceOrderThenVerifyThatThenReturnNullPayload" description="FuntionalTest-GivenARequestWhenDeleteByIdAServiceOrderThenVerifyThatThenReturnNullPayload" doc:id="695dd7f5-56bf-464f-844f-8f80f6b8b8da">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="delete:\service\order\(id):poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when call deleteServiceOrderById" doc:id="eda12404-498a-4812-be8d-fd19d709d970" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="deleteServiceOrderById" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[null]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		
+
+</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="requestHTTPDeleteServiceOrderById" doc:id="b8c77ee7-d092-4343-8e2f-f67e5d5608de" name="requestHTTPDeleteServiceOrderById" />
+
+</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="76175eaf-aaa2-43e6-8e4b-ab4520991148" processor="mule:set-payload" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="doc:name" whereValue="Set null Payload" />
+					<munit-tools:with-attribute attributeName="value" whereValue="#[null]" />
+				
+</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+
+</munit:validation>
+	</munit:test>
+	<sub-flow name="requestHTTPDeleteServiceOrderById" doc:id="e9e45a8b-e0cf-42ae-9fc5-f8d724b81c5a" >
+		<http:request method="DELETE" doc:name="HTTP-Delete-ServiceOrder" doc:id="53731e9a-0604-46c8-9930-0e47b410a06e" config-ref="HTTP_API_TEST_Request_configuration" path="/service/order/{id}">
+					<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id" : "1"
+}]]]></http:uri-params>
+				<http:response-validator>
+						<http:success-status-code-validator values="200" />
+					</http:response-validator>
+			</http:request>
+	</sub-flow>
+</mule>
