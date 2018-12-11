@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd 
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="http_get_service_order_api-test-suite.xml" />
+	<munit:before-test name="http_get_service_order_api-test-suiteBefore_Test" description="Before tests actions" doc:id="113e292b-9064-480a-8ba8-cd7c9685e841" >
+		<flow-ref doc:name="setExpectedGellAllServiceOrdersByFilterResponse" doc:id="3cc70ceb-0a40-4a2d-95e7-c67d308886f8" name="setExpectedGellAllServiceOrdersByFilterResponse"/>
+	</munit:before-test>
+	<munit:test name="FuntionalTest-GivenARequestWhenGetAllServiceOrdersThenReturnAValidResponse" description="FuntionalTest-GivenARequestWhenGetAllServiceOrdersThenReturnAValidResponse" doc:id="6476ef94-73e2-4cdb-96e7-88248e295021">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="get:\service\order:poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when call getAllServiceOrderByFilters" doc:id="198274b1-a73b-4d72-8e0a-4121e2ea4e47" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="getAllServiceOrderByFilters" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedGellAllServiceOrdersByFilterResponse]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="requestHTTPGETAllServiceOrder" doc:id="d4f3fa9d-5ecb-4c1e-83f6-510c5dc9e08f" name="requestHTTPGETAllServiceOrder" />
+</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Response Message is Not Null" doc:id="a64c8e06-14a9-4803-b414-1edd0515d58f" expression="#[payload]" is="#[MunitTools::notNullValue()]" message="Response Message is Null!!" />
+			<munit-tools:assert-that doc:name="Assert that Response Message is the expected Message" doc:id="e112074c-784a-4362-af67-a4af35b00732" expression="#[payload]" is="#[MunitTools::equalTo(vars.expectedGellAllServiceOrdersByFilterResponse default '')]" message="Response Message is Null!!" />
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenARequestWhenGetAllServiceOrdersThenReturnAHTTPSTATUS200" description="FuntionalTest-GivenARequestWhenGetAllServiceOrdersThenReturnAHTTPSTATUS200" doc:id="f7803af1-cfea-4a94-b782-2f02afb12f19">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="get:\service\order:poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when call getAllServiceOrderByFilters" doc:id="d7289bfd-f97c-48b5-bba9-831c1534a9da" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="getAllServiceOrderByFilters" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedGellAllServiceOrdersByFilterResponse]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		
+</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="requestHTTPGETAllServiceOrder" doc:id="f278c747-004b-4cb7-a931-2a7541f2f89d" name="requestHTTPGETAllServiceOrder" />
+
+</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Http Status Code is the expected" doc:id="982d009b-b1ce-42ae-b4b9-3810d69f5f9f" expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(200 default 200)]" message="Http Status Code is not the expected!!!" />
+			<munit-tools:assert-that doc:name="Assert that Http Reason Phrase is the expected" doc:id="7c58097b-26e4-46d7-b15d-590e597afcb6" expression="#[attributes.reasonPhrase]" is="#[MunitTools::equalTo('OK' default '')]" message="Http Status Code is not the expected!!!" />
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenARequestWhenGetAllServiceOrdersThenReturnExpectedContentType" description="FuntionalTest-GivenARequestWhenGetAllServiceOrdersThenReturnExpectedContentType" doc:id="dbf1b8d4-b0ea-4e35-9e18-3e24d7cf026f">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="get:\service\order:poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="Mock when call getAllServiceOrderByFilters" doc:id="46f6e395-06f9-4c7e-8c8c-c63a839e6366" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="getAllServiceOrderByFilters" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedGellAllServiceOrdersByFilterResponse]" mediaType="application/json"/>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		
+</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="requestHTTPGETAllServiceOrder" doc:id="a18fd6fe-b1bc-4c86-b70f-2deabb44f08c" name="requestHTTPGETAllServiceOrder" />
+			<logger level="INFO" doc:name="Logger" doc:id="427e7b8a-6564-4e81-b812-a2f9085a231d" message="#[message]"/>
+
+</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Http Content Type is the expected" doc:id="e54113ea-f6fe-4541-bfce-be68fbb3d81a" expression="#[attributes.headers.'content-type']" is="#[MunitTools::equalTo('application/json' default '')]" message="Http Content Type is not the expected!!!" />
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenARequestWhenGetAllServiceOrdersThenVerifyThatTheRequestWasRoutedToRigthImplementation" description="FuntionalTest-GivenAUpdateServiceOrderRequestWhenPutRequestToServiceOrderAPIThenVerifyThatTheRequestWasRoutedToRigthImplementation" doc:id="9a8a3a8c-a23f-4224-a39b-1883ebd81c94">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="get:\service\order:poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when call getAllServiceOrderByFilters" doc:id="99efed81-5881-4cce-b3c7-3f78c703a1e4" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="getAllServiceOrderByFilters" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedGellAllServiceOrdersByFilterResponse]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		
+</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="requestHTTPGETAllServiceOrder" doc:id="c9c07448-3585-4acf-8547-8482766ef82a" name="requestHTTPGETAllServiceOrder" />
+
+</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="1738e92a-ad7d-44bc-9adf-878c2a9ec3f4" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="getAllServiceOrderByFilters" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+
+</munit:validation>
+	</munit:test>
+	<sub-flow name="requestHTTPGETAllServiceOrder" doc:id="e9e45a8b-e0cf-42ae-9fc5-f8d724b81c5a" >
+		<http:request method="GET" doc:name="HTTP-GET-AllServiceOrder" doc:id="53731e9a-0604-46c8-9930-0e47b410a06e" config-ref="HTTP_API_TEST_Request_configuration" path="/service/order">
+				<http:response-validator>
+						<http:success-status-code-validator values="200" />
+					</http:response-validator>
+			</http:request>
+	</sub-flow>
+</mule>

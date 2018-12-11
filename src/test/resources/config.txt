@@ -1,0 +1,2 @@
+#JKS keystore for HTTPS
+keytool -genkeypair -keystore niscprocessapi_ks_prd.jks   -dname "CN=localhost, OU=NiscMulesoftTeam, O=Newtoms, L=Alpharetta, ST=Georgia, C=US"  -keypass n1scPrcN3wt0msPRD  -storepass n1scPrcN3wt0msPRD -keyalg RSA  -sigalg SHA1withRSA  -keysize 2048  -alias mule  -ext SAN=DNS:localhost,IP:127.0.0.1 -validity 1155
