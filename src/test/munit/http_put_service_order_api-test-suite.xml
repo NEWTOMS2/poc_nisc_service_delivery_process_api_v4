@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd 
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="http_put_service_order_api-test-suite.xml" />
+	<munit:before-test name="http_put_service_order_api-test-suiteBefore_Test" description="Before tests actions" doc:id="91cf3e66-1eb1-479c-a457-fc83deb264b6" >
+		<flow-ref doc:name="setExpectedPutUpdateServiceOrderResponse" doc:id="25a959d0-e271-4afb-a8ed-a54a895847e0" name="setExpectedPutUpdateServiceOrderResponse"/>
+	</munit:before-test>
+	<munit:test name="FuntionalTest-GivenAUpdateServiceOrderRequestWhenPutRequestToServiceOrderAPIThenReturnAValidResponse" description="FuntionalTest-GivenAUpdateServiceOrderRequestWhenPutRequestToServiceOrderAPIThenReturnAValidResponse" doc:id="6476ef94-73e2-4cdb-96e7-88248e295021">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="put:\service\order\(id):application\json:poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when call updateServiceOrderById" doc:id="109405de-de4b-4ae4-a746-ec5fd05071d5" processor="mule:flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="updateServiceOrderById" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.putUpdateServiceOrderResponse]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="getUpdateServiceOrderRequestForTest" doc:id="ed58a92f-8f9f-4077-9ad0-336acd494658" name="getUpdateServiceOrderRequestForTest"/>
+			<flow-ref doc:name="requestHTTPPUTUpdateServiceOrder" doc:id="d4f3fa9d-5ecb-4c1e-83f6-510c5dc9e08f" name="requestHTTPPUTUpdateServiceOrder" />
+</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Response Message is Not Null" doc:id="a64c8e06-14a9-4803-b414-1edd0515d58f" expression="#[payload]" is="#[MunitTools::notNullValue()]" message="Response Message is Null!!" />
+			<munit-tools:assert-that doc:name="Assert that Response Message is the expected Message" doc:id="e112074c-784a-4362-af67-a4af35b00732" expression="#[payload]" is="#[MunitTools::equalTo(vars.putUpdateServiceOrderResponse default '')]" message="Response Message is Null!!" />
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenAUpdateServiceOrderRequestWhenPutRequestToServiceOrderAPIThenReturnAHTTPSTATUS200" description="FuntionalTest-GivenAUpdateServiceOrderRequestWhenPutRequestToServiceOrderAPIThenReturnAHTTPSTATUS200" doc:id="f7803af1-cfea-4a94-b782-2f02afb12f19">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="put:\service\order\(id):application\json:poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when call updateServiceOrderById" doc:id="da6534ff-213d-4c6b-9cf7-fca8b70836fd" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="updateServiceOrderById" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.putUpdateServiceOrderResponse]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		
+</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="getUpdateServiceOrderRequestForTest" doc:id="77f932eb-f4af-4d40-b61f-187d3ed284f4" name="getUpdateServiceOrderRequestForTest" />
+			<flow-ref doc:name="requestHTTPPUTUpdateServiceOrder" doc:id="f278c747-004b-4cb7-a931-2a7541f2f89d" name="requestHTTPPUTUpdateServiceOrder" />
+
+</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Http Status Code is the expected" doc:id="982d009b-b1ce-42ae-b4b9-3810d69f5f9f" expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(200 default 200)]" message="Http Status Code is not the expected!!!" />
+			<munit-tools:assert-that doc:name="Assert that Http Reason Phrase is the expected" doc:id="7c58097b-26e4-46d7-b15d-590e597afcb6" expression="#[attributes.reasonPhrase]" is="#[MunitTools::equalTo('OK' default '')]" message="Http Status Code is not the expected!!!" />
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenAUpdateServiceOrderRequestWhenPutRequestToServiceOrderAPIThenReturnExpectedContentType" description="FuntionalTest-GivenAUpdateServiceOrderRequestWhenPutRequestToServiceOrderAPIThenReturnExpectedContentType" doc:id="dbf1b8d4-b0ea-4e35-9e18-3e24d7cf026f">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="put:\service\order\(id):application\json:poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when call updateServiceOrderById" doc:id="a3c36e09-bd9f-4ec6-a71a-d909e30c2306" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="updateServiceOrderById" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.putUpdateServiceOrderResponse]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		
+</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="getUpdateServiceOrderRequestForTest" doc:id="057251e7-eafe-4644-9ead-6938231d3428" name="getUpdateServiceOrderRequestForTest"/>
+			<flow-ref doc:name="requestHTTPPUTUpdateServiceOrder" doc:id="a18fd6fe-b1bc-4c86-b70f-2deabb44f08c" name="requestHTTPPUTUpdateServiceOrder" />
+
+</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Http Content Type is the expected" doc:id="e54113ea-f6fe-4541-bfce-be68fbb3d81a" expression="#[attributes.headers.'content-type']" is="#[MunitTools::equalTo('application/json; charset=UTF-8' default '')]" message="Http Content Type is not the expected!!!" />
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenAUpdateServiceOrderRequestWhenPutRequestToServiceOrderAPIThenVerifyThatTheRequestWasRoutedToRigthImplementation" description="FuntionalTest-GivenAUpdateServiceOrderRequestWhenPutRequestToServiceOrderAPIThenVerifyThatTheRequestWasRoutedToRigthImplementation" doc:id="9a8a3a8c-a23f-4224-a39b-1883ebd81c94">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="put:\service\order\(id):application\json:poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when call updateServiceOrderById" doc:id="40058022-83ff-485b-a76a-23f551b84c01" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="updateServiceOrderById" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.putUpdateServiceOrderResponse]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		
+</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="getUpdateServiceOrderRequestForTest" doc:id="c3dd1432-1c69-4e99-ad3e-503a4cb75158" name="getUpdateServiceOrderRequestForTest"/>
+			<flow-ref doc:name="requestHTTPPUTUpdateServiceOrder" doc:id="c9c07448-3585-4acf-8547-8482766ef82a" name="requestHTTPPUTUpdateServiceOrder" />
+
+</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="1738e92a-ad7d-44bc-9adf-878c2a9ec3f4" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="updateServiceOrderById" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenAUpdateServiceOrderRequestWhenPutRequestToServiceOrderAPIThenGetIdFromURI" description="FuntionalTest-GivenAUpdateServiceOrderRequestWhenPutRequestToServiceOrderAPIThenGetIdFromURI" doc:id="f14a825f-5174-40ba-8746-80d3aa54527b">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_delivery_process_api_v4-main" />
+			<munit:enable-flow-source value="put:\service\order\(id):application\json:poc_nisc_service_delivery_process_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:behavior >
+			<munit-tools:spy doc:name="Spy Call updateServiceOrderById" doc:id="2aeeb5ff-eed6-4edd-8983-ef92a723b146" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="updateServiceOrderById" />
+				</munit-tools:with-attributes>
+				<munit-tools:before-call >
+					<munit-tools:assert-that doc:name="Assert that Http URI Id Param is the expected" doc:id="872b7144-3bf9-4276-a9e9-f5f6e9212d17" expression="#[vars.id]" is="#[MunitTools::equalTo('1' default '0')]" message="Http URI Id Param is not the expected!!!" />
+				</munit-tools:before-call>
+			</munit-tools:spy>
+			<munit-tools:mock-when doc:name="Mock when call updateServiceOrderById" doc:id="5a751390-2f01-4efb-a30f-681beb9659bf" processor="mule:flow-ref">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute attributeName="name" whereValue="updateServiceOrderById" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:payload value="#[vars.putUpdateServiceOrderResponse]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		
+
+</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="getUpdateServiceOrderRequestForTest" doc:id="a262fdca-4150-4918-9ebd-00a0f427e157" name="getUpdateServiceOrderRequestForTest"/>
+			<flow-ref doc:name="requestHTTPPUTUpdateServiceOrder" doc:id="48285301-920f-4ced-974b-2049a336218e" name="requestHTTPPUTUpdateServiceOrder" />
+
+</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="3fae2447-49ae-4185-a027-3709db8b58eb" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="setOrderIdVaribleFromURIId" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+
+</munit:validation>
+	</munit:test>
+	<sub-flow name="requestHTTPPUTUpdateServiceOrder" doc:id="e9e45a8b-e0cf-42ae-9fc5-f8d724b81c5a" >
+		<http:request method="PUT" doc:name="HTTP-PUT-UpdateServiceOrder" doc:id="53731e9a-0604-46c8-9930-0e47b410a06e" config-ref="HTTP_API_TEST_Request_configuration" path="/service/order/{id}">
+					<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id" : "1"
+}]]]></http:uri-params>
+				<http:response-validator>
+						<http:success-status-code-validator values="200" />
+					</http:response-validator>
+			</http:request>
+	</sub-flow>
+</mule>

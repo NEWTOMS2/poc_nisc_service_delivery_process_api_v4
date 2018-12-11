@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:pocni-scservice-delivery-system-api="http://www.mulesoft.org/schema/mule/pocni-scservice-delivery-system-api" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/pocni-scservice-delivery-system-api http://www.mulesoft.org/schema/mule/pocni-scservice-delivery-system-api/current/mule-pocni-scservice-delivery-system-api.xsd">
+	<pocni-scservice-delivery-system-api:config name="POC_NiSC_Service_Delivery_System_CMS_API_Config" doc:name="POC NiSC Service Delivery System API Config" doc:id="e2baea78-9364-472e-bed0-1a9521ace3cf" property_host="${sys.cms.api.host}" property_port="${sys.cms.api.port}" property_basePath="${sys.cms.api.basePath}" property_protocol="${sys.cms.api.protocol}"/>
+	<sub-flow name="configureE7ViaCMS" doc:id="79a3154c-3de3-4d4f-a807-76f991bf4a03" >
+		<pocni-scservice-delivery-system-api:create-a-service-order doc:name="Create a service order CMS" doc:id="bf9e21bb-e5d0-450d-8fda-16aa180eca41" config-ref="POC_NiSC_Service_Delivery_System_CMS_API_Config"/>
+	</sub-flow>
+</mule>
